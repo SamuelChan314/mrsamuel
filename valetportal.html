@@ -4,169 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valet Portal | Driveway Log</title>
-        <style>
+    <style>
         /* General Styles */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
             margin: 0;
-            padding: 10px; /* Reduced padding for mobile */
+            padding: 10px; /* Reduced for mobile breathing room */
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-    
+
+        /* HEADER SECTION */
         header {
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
-                      url('https://i.imgur.com/St8RLPM.jpeg');
+                              url('https://i.imgur.com/St8RLPM.jpeg');
             background-size: cover;
             background-position: center;
-            height: 250px; 
-            width: 100%; /* Changed from 1000px to 100% */
-            max-width: 1200px; /* Limits size on big screens */
+            
+            /* Responsive Widths */
+            width: 100%;
+            max-width: 1200px; 
+            height: 250px;
+            
+            /* Centering Content */
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            
             color: white; 
             text-align: center;
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-    
-        h1 {
+
+        header h1 {
             color: #FFFFFF;
-            font-size: 2rem; /* Scaled down slightly for mobile */
+            margin: 0;
+            font-size: 2.2rem;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            padding: 0 10px;
-            margin-bottom: 5px;
-        }
-    
-        header p {
             padding: 0 15px;
         }
-    
+
+        header p {
+            font-size: 1rem;
+            margin-top: 10px;
+            padding: 0 20px;
+            opacity: 0.9;
+        }
+
+        /* LAYOUT CONTAINER */
         .content-container {
             width: 100%;
             max-width: 1200px;
             display: grid;
-            grid-template-columns: 1fr 1fr; 
+            grid-template-columns: 1fr 1fr; /* Two columns for Desktop */
             gap: 20px;
         }
-    
+
+        /* CARD STYLING */
         .frame-card {
             background: white;
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: center; 
         }
-    
+
+        .frame-card h2 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 15px;
+            width: 100%;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* IFRAME STYLING */
         iframe {
-            width: 100%; /* Changed to 100% to fill the card */
+            width: 100%; /* Full width of the card */
             border: none;
             border-radius: 4px;
-            height: 600px;
+            background: #fff;
         }
-    
-        /* --- PHONE LAYOUT ADJUSTMENTS --- */
+
+        .form-frame { height: 700px; }
+        .sheet-frame { height: 700px; }
+
+        /* --- PHONE LAYOUT (RESPONSIVE) --- */
         @media (max-width: 900px) {
             body {
-                padding: 5px;
+                padding: 10px 5px;
             }
-    
+
             .content-container {
-                grid-template-columns: 1fr; /* Stacks the cards */
+                grid-template-columns: 1fr; /* Stacks the cards vertically */
             }
-    
+
             header {
                 height: 200px;
+                border-radius: 0; /* Full width look on mobile */
             }
-    
-            h1 {
-                font-size: 1.5rem;
+
+            header h1 {
+                font-size: 1.6rem;
             }
-    
-            iframe {
-                height: 500px; /* Slightly shorter on phones for easier scrolling */
+
+            .form-frame, .sheet-frame {
+                height: 600px; /* Slightly shorter for easier mobile scrolling */
             }
         }
     </style>
-        height: 250px; 
-        width: 100%; /* Changed from 1000px to 100% */
-        max-width: 1200px; /* Limits size on big screens */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: white; 
-        text-align: center;
-        border-radius: 8px;
-        margin-bottom: 20px;
-    }
-
-    h1 {
-        color: #FFFFFF;
-        font-size: 2rem; /* Scaled down slightly for mobile */
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        padding: 0 10px;
-        margin-bottom: 5px;
-    }
-
-    header p {
-        padding: 0 15px;
-    }
-
-    .content-container {
-        width: 100%;
-        max-width: 1200px;
-        display: grid;
-        grid-template-columns: 1fr 1fr; 
-        gap: 20px;
-    }
-
-    .frame-card {
-        background: white;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    iframe {
-        width: 100%; /* Changed to 100% to fill the card */
-        border: none;
-        border-radius: 4px;
-        height: 600px;
-    }
-
-    /* --- PHONE LAYOUT ADJUSTMENTS --- */
-    @media (max-width: 900px) {
-        body {
-            padding: 5px;
-        }
-
-        .content-container {
-            grid-template-columns: 1fr; /* Stacks the cards */
-        }
-
-        header {
-            height: 200px;
-        }
-
-        h1 {
-            font-size: 1.5rem;
-        }
-
-        iframe {
-            height: 500px; /* Slightly shorter on phones for easier scrolling */
-        }
-    }
-</style>
 </head>
 <body>
 
