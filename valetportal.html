@@ -10,7 +10,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
             margin: 0;
-            padding: 10px; /* Reduced for mobile breathing room */
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -22,18 +22,13 @@
                               url('https://i.imgur.com/St8RLPM.jpeg');
             background-size: cover;
             background-position: center;
-            
-            /* Responsive Widths */
             width: 100%;
             max-width: 1200px; 
             height: 250px;
-            
-            /* Centering Content */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            
             color: white; 
             text-align: center;
             border-radius: 12px;
@@ -53,7 +48,6 @@
             font-size: 1rem;
             margin-top: 10px;
             padding: 0 20px;
-            opacity: 0.9;
         }
 
         /* LAYOUT CONTAINER */
@@ -61,64 +55,58 @@
             width: 100%;
             max-width: 1200px;
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Two columns for Desktop */
+            grid-template-columns: 1fr 1fr; 
             gap: 20px;
         }
 
         /* CARD STYLING */
         .frame-card {
             background: white;
-            padding: 15px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
-            align-items: center; 
         }
 
         .frame-card h2 {
             font-size: 1.2rem;
             color: #2c3e50;
-            margin-top: 0;
-            margin-bottom: 15px;
-            width: 100%;
             text-align: center;
             border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
         }
 
-        /* IFRAME STYLING */
+        /* IFRAME STYLING - COMPUTER DEFAULT */
         iframe {
-            width: 100%; /* Full width of the card */
+            width: 80%; /* Computer width */
+            margin: 0 auto; /* Centers the iframe */
             border: none;
             border-radius: 4px;
             background: #fff;
+            height: 700px;
         }
-
-        .form-frame { height: 700px; }
-        .sheet-frame { height: 700px; }
 
         /* --- PHONE LAYOUT (RESPONSIVE) --- */
         @media (max-width: 900px) {
-            body {
-                padding: 10px 5px;
-            }
-
             .content-container {
-                grid-template-columns: 1fr; /* Stacks the cards vertically */
+                grid-template-columns: 1fr; /* Stacks cards vertically */
             }
 
             header {
                 height: 200px;
-                border-radius: 0; /* Full width look on mobile */
+                border-radius: 0;
             }
 
             header h1 {
                 font-size: 1.6rem;
             }
 
-            .form-frame, .sheet-frame {
-                height: 600px; /* Slightly shorter for easier mobile scrolling */
+            /* IFRAME STYLING - PHONE */
+            iframe {
+                width: 90%; /* Phone width */
+                height: 600px;
             }
         }
     </style>
