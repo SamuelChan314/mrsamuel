@@ -1,20 +1,99 @@
-<style>
-    /* General Styles */
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f4f7f6;
-        margin: 0;
-        padding: 10px; /* Reduced padding for mobile */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    header {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
-                  url('https://i.imgur.com/St8RLPM.jpeg');
-        background-size: cover;
-        background-position: center;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valet Portal | Driveway Log</title>
+        <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 10px; /* Reduced padding for mobile */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        header {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                      url('https://i.imgur.com/St8RLPM.jpeg');
+            background-size: cover;
+            background-position: center;
+            height: 250px; 
+            width: 100%; /* Changed from 1000px to 100% */
+            max-width: 1200px; /* Limits size on big screens */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white; 
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    
+        h1 {
+            color: #FFFFFF;
+            font-size: 2rem; /* Scaled down slightly for mobile */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            padding: 0 10px;
+            margin-bottom: 5px;
+        }
+    
+        header p {
+            padding: 0 15px;
+        }
+    
+        .content-container {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px;
+        }
+    
+        .frame-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        iframe {
+            width: 100%; /* Changed to 100% to fill the card */
+            border: none;
+            border-radius: 4px;
+            height: 600px;
+        }
+    
+        /* --- PHONE LAYOUT ADJUSTMENTS --- */
+        @media (max-width: 900px) {
+            body {
+                padding: 5px;
+            }
+    
+            .content-container {
+                grid-template-columns: 1fr; /* Stacks the cards */
+            }
+    
+            header {
+                height: 200px;
+            }
+    
+            h1 {
+                font-size: 1.5rem;
+            }
+    
+            iframe {
+                height: 500px; /* Slightly shorter on phones for easier scrolling */
+            }
+        }
+    </style>
         height: 250px; 
         width: 100%; /* Changed from 1000px to 100% */
         max-width: 1200px; /* Limits size on big screens */
@@ -88,3 +167,34 @@
         }
     }
 </style>
+</head>
+<body>
+
+    <header>
+        <h1>[TESTING] JWYEG Valet Portal</h1>
+        <p>Log and view all drivers ignored our policies or instructions.</p>
+    </header>
+
+    <div class="content-container">
+        
+        <div class="frame-card">
+            <h2>Driveway Log Form</h2>
+            <iframe 
+                src="https://docs.google.com/forms/d/e/1FAIpQLScmnH3czFTZ34dGjE23YuYMMLyTO_JdjA_fjNxMBjz68-ClGg/viewform?embedded=true" 
+                class="form-frame">
+                Loading…
+            </iframe>
+        </div>
+
+        <div class="frame-card">
+            <h2>Driveway Log Database</h2>
+            <iframe 
+                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT9a2j2_aw4q5RzfchbR_ApILPKP71K36aK8JAORCNJ8kHSR7fAsYdf11An5CitFe6kLELt40BQ_rKd/pubhtml?widget=true&amp;headers=false" 
+                class="sheet-frame">
+            </iframe>
+        </div>
+
+    </div>
+
+</body>
+</html>
