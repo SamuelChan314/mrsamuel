@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valet Portal | Driveway Log</title>
     <style>
-        /* General Styles */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
@@ -15,8 +14,7 @@
             flex-direction: column;
             align-items: center;
         }
-
-        /* HEADER SECTION */
+        
         header {
             background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
                               url('https://i.imgur.com/St8RLPM.jpeg');
@@ -49,8 +47,7 @@
             margin-top: 10px;
             padding: 0 20px;
         }
-
-        /* LAYOUT CONTAINER */
+        
         .content-container {
             width: 100%;
             max-width: 1200px;
@@ -58,8 +55,7 @@
             grid-template-columns: 1fr 1fr; 
             gap: 20px;
         }
-
-        /* CARD STYLING */
+        
         .frame-card {
             background: white;
             padding: 20px;
@@ -78,20 +74,18 @@
             margin-bottom: 20px;
         }
 
-        /* IFRAME STYLING - COMPUTER DEFAULT */
         iframe {
-            width: 90%; /* Computer width */
-            margin: 0 auto; /* Centers the iframe */
+            width: 90%; 
+            margin: 0 auto; 
             border: none;
             border-radius: 4px;
             background: #fff;
             height: 700px;
         }
 
-        /* --- PHONE LAYOUT (RESPONSIVE) --- */
         @media (max-width: 900px) {
             .content-container {
-                grid-template-columns: 1fr; /* Stacks cards vertically */
+                grid-template-columns: 1fr;
             }
 
             header {
@@ -103,9 +97,8 @@
                 font-size: 1.6rem;
             }
 
-            /* IFRAME STYLING - PHONE */
             iframe {
-                width: 95%; /* Phone width */
+                width: 95%;
                 height: 600px;
             }
         }
