@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JWYEG Valet Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <style>
         :root {
@@ -15,273 +15,228 @@
             --bg-image: url('https://i.imgur.com/St8RLPM.jpeg');
             --text-main: #252423;
             --text-light: #605e5c;
-            --border: #e1dfdd;
-            --input-bg: #f3f2f1;
+            --input-bg: #f8f9fa;
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', sans-serif;
-            background-color: #f8f9fa;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden; 
         }
 
-        /* --- 1. Top Hero Section --- */
+        /* --- 1. Hero Section --- */
         .hero-banner {
-            background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), var(--bg-image);
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), var(--bg-image);
             background-size: cover;
-            background-position: center 30%;
+            background-position: center;
             padding: 20px 40px;
             color: white;
             text-align: center;
             flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
             border-bottom: 4px solid var(--primary);
-        }
-
-        .hero-banner h1 { margin: 0; font-size: 26px; font-weight: 600; letter-spacing: 0.5px; }
-        .hero-banner p { margin: 4px 0 0 0; opacity: 0.85; font-size: 13px; }
-
-        /* --- 2. Main Split Container (50/50) --- */
-        .main-content {
-            display: flex;
-            flex: 1; 
-            padding: 20px;
-            gap: 25px;
-            overflow: hidden;
-            background: #f0f2f5;
-        }
-
-        /* Shared Panel Styles */
-        .panel {
-            flex: 1; 
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-
-        /* --- LEFT PANEL: MODERN FORM --- */
-        .form-container {
-            overflow-y: auto;
-        }
-
-        .form-header {
-            padding: 20px 30px;
-            border-bottom: 1px solid #eee;
-            background: white;
-            position: sticky;
-            top: 0;
+            position: relative;
             z-index: 10;
         }
 
-        .form-header h2 { margin: 0; color: var(--primary); font-size: 20px; }
-        .form-header span { font-size: 12px; color: var(--text-light); }
+        .hero-banner h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .hero-banner p { margin: 6px 0 0 0; opacity: 0.9; font-size: 14px; font-weight: 400; }
 
-        .form-body {
-            padding: 25px 30px;
+        /* --- 2. Main Layout (50/50) --- */
+        .main-content {
+            display: flex;
+            flex: 1; 
+            padding: 25px;
+            gap: 30px;
+            overflow: hidden;
         }
 
-        .q-group { margin-bottom: 24px; }
+        /* Panel Styling */
+        .panel {
+            flex: 1; 
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.6);
+            backdrop-filter: blur(10px);
+        }
+
+        /* --- LEFT PANEL: FORM --- */
+        .form-container { overflow-y: auto; }
+
+        .form-header {
+            padding: 20px 30px;
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+        .form-header h2 { margin: 0; color: var(--primary); font-size: 22px; display: flex; align-items: center; gap: 10px; }
+        
+        .form-body { padding: 25px 35px; }
+
+        .q-group { margin-bottom: 24px; position: relative; }
         
         .label { 
             display: block; 
-            font-weight: 600; 
+            font-weight: 700; 
             font-size: 13px; 
             margin-bottom: 8px; 
             color: var(--text-main);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+        .desc-text { font-size: 12px; color: #888; margin-top: -6px; margin-bottom: 8px; font-style: italic; }
 
-        /* Pretty Inputs */
+        /* Input with Icons */
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            color: #999;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
         .input-box {
             width: 100%; 
-            padding: 12px 15px; 
+            padding: 12px 15px 12px 40px; /* Space for icon */
             border: 1px solid transparent; 
-            border-radius: 8px;
-            box-sizing: border-box; 
+            border-radius: 10px;
             font-family: inherit; 
             font-size: 14px;
             background-color: var(--input-bg);
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
         .input-box:focus { 
             background-color: #fff;
-            border-color: var(--primary); 
-            outline: none; 
-            box-shadow: 0 0 0 3px rgba(3, 120, 124, 0.1);
+            box-shadow: 0 0 0 3px rgba(3, 120, 124, 0.15);
+            color: var(--text-main);
+            outline: none;
         }
+        .input-box:focus + i { color: var(--primary); }
 
-        /* "Chip" Style Checkboxes */
-        .chip-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .chip-label {
-            cursor: pointer;
-            position: relative;
-        }
-
-        .chip-label input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-            height: 0;
-            width: 0;
-        }
-
+        /* Categories */
+        .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
+        .chip-label { cursor: pointer; position: relative; }
+        .chip-label input { position: absolute; opacity: 0; width: 0; height: 0; }
+        
         .chip-text {
-            display: inline-block;
-            padding: 8px 16px;
-            background-color: var(--input-bg);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background-color: #f0f2f5;
             border-radius: 20px;
             font-size: 13px;
-            color: var(--text-main);
-            transition: all 0.2s;
+            color: #555;
+            font-weight: 600;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid transparent;
-            font-weight: 500;
         }
-
-        .chip-label:hover .chip-text {
-            background-color: #e1e1e1;
-        }
-
-        /* Selected State */
+        .chip-label:hover .chip-text { background-color: #e4e6eb; transform: translateY(-1px); }
         .chip-label input:checked ~ .chip-text {
             background-color: var(--primary);
             color: white;
-            box-shadow: 0 2px 5px rgba(3, 120, 124, 0.3);
+            box-shadow: 0 4px 10px rgba(3, 120, 124, 0.3);
+            transform: scale(1.05);
         }
 
+        /* Submit Button */
         .submit-btn {
-            background: var(--primary); 
+            background: linear-gradient(45deg, var(--primary), #025c5f);
             color: white; 
             border: none; 
             padding: 14px; 
             width: 100%;
-            border-radius: 8px; 
+            border-radius: 10px; 
             font-weight: 600; 
             cursor: pointer; 
-            margin-top: 10px;
-            font-size: 15px;
-            transition: transform 0.1s, background 0.2s;
+            margin-top: 15px;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(3, 120, 124, 0.3);
+            transition: all 0.2s;
         }
-        .submit-btn:hover { background: var(--primary-hover); }
-        .submit-btn:active { transform: scale(0.98); }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(3, 120, 124, 0.4); }
 
-        /* --- RIGHT PANEL: TABLE & SEARCH --- */
-        .table-panel-header {
-            padding: 15px 20px;
-            background: white;
+        /* --- RIGHT PANEL: TABLE --- */
+        .table-header-control {
+            padding: 15px 25px;
+            background: #fff;
             border-bottom: 1px solid #eee;
             display: flex;
             align-items: center;
-            gap: 15px;
         }
-
-        /* Search Box */
-        .search-wrapper {
-            flex: 1;
-            position: relative;
-        }
-        .search-wrapper i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            font-size: 14px;
-        }
-        .search-input {
+        .search-bar {
             width: 100%;
-            padding: 10px 10px 10px 35px; /* space for icon */
+            padding: 10px 15px 10px 40px;
             border-radius: 20px;
-            border: 1px solid #ddd;
-            font-size: 13px;
-            outline: none;
-            transition: border 0.2s;
+            border: 1px solid #e1dfdd;
+            background: #f9f9f9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") no-repeat 12px center;
+            font-size: 14px;
+            transition: all 0.2s;
         }
-        .search-input:focus { border-color: var(--primary); }
+        .search-bar:focus { background-color: #fff; border-color: var(--primary); outline: none; }
 
-        .table-container {
+        .table-wrap {
             flex: 1;
-            overflow: auto; /* Handles both X and Y scroll */
-            position: relative;
+            overflow: auto; /* Allow X and Y scrolling */
         }
-
+        
         table {
             width: 100%;
-            min-width: 800px; /* Forces scrollbar on small screens */
+            min-width: 900px; /* Forces Horizontal Scroll if screen is small */
             border-collapse: collapse;
             font-size: 13px;
         }
-
-        thead {
-            background: #fafafa;
+        
+        thead th {
             position: sticky;
             top: 0;
-            z-index: 5;
-        }
-
-        th {
-            text-align: left;
-            padding: 14px 15px;
+            background: #f8f9fa;
             color: var(--text-light);
             font-weight: 600;
+            text-align: left;
+            padding: 14px 18px;
+            border-bottom: 2px solid #e9e9e9;
+            white-space: nowrap;
             cursor: pointer;
             user-select: none;
-            border-bottom: 2px solid #eee;
-            white-space: nowrap; /* Prevents header wrap */
-            transition: color 0.2s;
+            z-index: 5;
         }
-        
-        th:hover { color: var(--primary); background: #f4f4f4; }
+        thead th:hover { color: var(--primary); background: #f0f0f0; }
 
-        td {
-            padding: 12px 15px;
+        tbody td {
+            padding: 12px 18px;
             border-bottom: 1px solid #f0f0f0;
             color: var(--text-main);
             vertical-align: middle;
-            white-space: nowrap; /* Forces row to be long (scrollable) */
+            white-space: nowrap; /* Keeps rows neat */
         }
+        tbody tr:hover { background-color: #f1fcfc; }
 
-        tr:hover { background-color: #f8fcfc; }
-
-        /* Status Tags */
-        .cat-tag {
-            background: var(--primary-light); 
-            color: var(--primary);
-            padding: 3px 8px; 
-            border-radius: 6px; 
-            font-size: 11px;
-            display: inline-block;
-            margin-right: 4px;
-            font-weight: 600;
-        }
-
-        .loading { text-align: center; padding: 50px; color: #999; }
-
-        /* Scrollbar Styling */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #bbb; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a0aec0; }
 
         @media (max-width: 900px) {
-            .main-content { flex-direction: column; }
+            .main-content { flex-direction: column; height: auto; overflow: auto; }
+            .panel { min-height: 500px; flex: none; }
             body { overflow: auto; height: auto; }
-            .panel { height: 600px; flex: none; }
         }
     </style>
 </head>
@@ -296,81 +251,99 @@
         
         <div class="panel form-container">
             <div class="form-header">
-                <h2>New Log Entry</h2>
-                <span>Please fill in all details accurately.</span>
+                <h2><i class="fas fa-file-pen"></i> &nbsp;New Log Entry</h2>
             </div>
-
+            
             <div class="form-body">
                 <form id="googleForm" target="hidden_iframe" onsubmit="handleSub()" 
                       action="https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/formResponse" method="POST">
                     
                     <div class="q-group">
-                        <label class="label">License Plate *</label>
-                        <input type="text" class="input-box" name="entry.111111" placeholder="e.g. AA 1234" required autocomplete="off">
+                        <label class="label">Valet <span style="color:red">*</span></label>
+                        <div class="desc-text">Your Initials: eg. AA</div>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" class="input-box" name="entry.000000" placeholder="AA" required autocomplete="off" maxlength="5">
+                        </div>
                     </div>
 
                     <div class="q-group">
-                        <label class="label">Make/Model/Color *</label>
-                        <input type="text" class="input-box" name="entry.222222" placeholder="e.g. Honda Civic Black" required autocomplete="off">
+                        <label class="label">License Plate <span style="color:red">*</span></label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-car-side"></i>
+                            <input type="text" class="input-box" name="entry.111111" placeholder="e.g. AA 1234" required autocomplete="off">
+                        </div>
                     </div>
 
                     <div class="q-group">
-                        <label class="label">Category (Select all that apply)</label>
+                        <label class="label">Make/Model/Color <span style="color:red">*</span></label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-palette"></i>
+                            <input type="text" class="input-box" name="entry.222222" placeholder="e.g. Honda Civic Black" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="q-group">
+                        <label class="label">Category</label>
                         <div class="chip-container">
                             <label class="chip-label">
                                 <input type="checkbox" name="entry.333333" value="Legends">
-                                <span class="chip-text">Legends</span>
+                                <span class="chip-text"><i class="fas fa-star"></i> Legends</span>
                             </label>
                             <label class="chip-label">
                                 <input type="checkbox" name="entry.333333" value="Delivery">
-                                <span class="chip-text">Delivery</span>
+                                <span class="chip-text"><i class="fas fa-truck"></i> Delivery</span>
                             </label>
                             <label class="chip-label">
                                 <input type="checkbox" name="entry.333333" value="Pick-up/Drop-off">
-                                <span class="chip-text">Pick-up/Drop-off</span>
+                                <span class="chip-text"><i class="fas fa-people-arrows"></i> Pick-up/Drop-off</span>
                             </label>
                             <label class="chip-label">
                                 <input type="checkbox" name="entry.333333" value="Uber/Taxi">
-                                <span class="chip-text">Uber/Taxi</span>
+                                <span class="chip-text"><i class="fas fa-taxi"></i> Uber/Taxi</span>
                             </label>
                             <label class="chip-label">
                                 <input type="checkbox" name="entry.333333" value="Other">
-                                <span class="chip-text">Other</span>
+                                <span class="chip-text"><i class="fas fa-question-circle"></i> Other</span>
                             </label>
                         </div>
                     </div>
 
                     <div class="q-group">
-                        <label class="label">Description / Details</label>
-                        <input type="text" class="input-box" name="entry.444444" placeholder="Optional details..." autocomplete="off">
+                        <label class="label">Description / Note</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-sticky-note"></i>
+                            <input type="text" class="input-box" name="entry.444444" placeholder="Details (e.g. Parked in fire lane)" autocomplete="off">
+                        </div>
                     </div>
 
-                    <button type="submit" class="submit-btn">Submit Log</button>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i> &nbsp;Submit Log
+                    </button>
                 </form>
             </div>
             <iframe name="hidden_iframe" style="display:none;"></iframe>
         </div>
 
         <div class="panel">
-            <div class="table-panel-header">
-                <div class="search-wrapper">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" class="search-input" placeholder="Search plate, model, or category..." onkeyup="filterTable()">
-                </div>
+            <div class="table-header-control">
+                <input type="text" id="searchInput" class="search-bar" placeholder="Search database..." onkeyup="filterTable()">
             </div>
             
-            <div class="table-container">
-                <div id="loading" class="loading">
-                    <i class="fas fa-spinner fa-spin"></i> Loading database...
+            <div class="table-wrap">
+                <div id="loading" style="padding: 40px; text-align: center; color:#888;">
+                    <i class="fas fa-spinner fa-spin"></i> Loading data...
                 </div>
                 <table id="dataTable" style="display:none;">
                     <thead>
                         <tr>
                             <th onclick="sortTable(0)">Timestamp</th>
-                            <th onclick="sortTable(1)">License Plate</th>
-                            <th onclick="sortTable(2)">Vehicle</th>
-                            <th onclick="sortTable(3)">Category</th>
-                            <th onclick="sortTable(4)">Description</th> </tr>
+                            <th onclick="sortTable(1)">Valet</th>
+                            <th onclick="sortTable(2)">License Plate</th>
+                            <th onclick="sortTable(3)">Vehicle</th>
+                            <th onclick="sortTable(4)">Category</th>
+                            <th onclick="sortTable(5)">Note</th> 
+                        </tr>
                     </thead>
                     <tbody id="tableBody">
                         </tbody>
@@ -381,92 +354,97 @@
     </div>
 
     <script>
-        // --- 1. HANDLE SUBMISSION ---
+        // --- 1. Submission Logic ---
         function handleSub() {
             const btn = document.querySelector('.submit-btn');
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
+            const originalContent = btn.innerHTML;
+            
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> &nbsp;Saving...';
             btn.style.opacity = "0.8";
-            btn.style.pointerEvents = "none";
+            btn.disabled = true;
             
             setTimeout(() => {
-                alert("Log submitted successfully!");
-                btn.innerHTML = 'Submit Log';
+                alert("Log submitted!");
+                btn.innerHTML = originalContent;
                 btn.style.opacity = "1";
-                btn.style.pointerEvents = "auto";
+                btn.disabled = false;
                 document.getElementById('googleForm').reset();
-                fetchData(); 
+                fetchData();
             }, 1500);
         }
 
-        // --- 2. FETCH DATA ---
-        // REPLACE THIS LINK with your Published > CSV link
+        // --- 2. Fetch Data Logic ---
+        // REPLACE WITH YOUR PUBLISHED CSV URL
         const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT9a2j2_aw4q5RzfchbR_ApILPKP71K36aK8JAORCNJ8kHSR7fAsYdf11An5CitFe6kLELt40BQ_rKd/pub?output=csv";
 
-        let allRows = []; // Store data globally for search
+        let allRows = [];
 
         async function fetchData() {
             try {
+                // We add a timestamp to the URL to prevent the browser from caching old data
                 const response = await fetch(SHEET_CSV_URL + "&t=" + Date.now());
                 const data = await response.text();
                 
-                // CSV Parser
+                // Parse CSV
+                // This assumes your Google Sheet Columns are in this order:
+                // Timestamp | Valet | Plate | Vehicle | Category | Note
                 const lines = data.split('\n').slice(1);
                 allRows = lines.map(line => {
-                    // Simple CSV split (handling quotes crudely)
-                    // For robust CSV parsing, a library is better, but this works for simple text
                     const parts = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                     return parts.map(p => p ? p.replace(/^"|"$/g, '').trim() : '');
                 }).filter(r => r.length > 1);
 
                 renderTable(allRows);
-                
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('dataTable').style.display = 'table';
             } catch (err) {
                 console.error(err);
-                document.getElementById('loading').innerText = "Error loading data.";
             }
         }
 
-        // --- 3. RENDER TABLE ---
         function renderTable(data) {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
             
             data.forEach(cols => {
-                // Format Categories
-                let cats = cols[3] ? cols[3].split(',').map(c => `<span class="cat-tag">${c.trim()}</span>`).join('') : '<span style="color:#ccc">--</span>';
+                // Map columns safely. If a column is missing, show empty string.
+                // You may need to adjust indices [0], [1], etc based on your actual sheet column order.
+                const ts = cols[0] || '';
+                const valet = cols[1] || '--'; // Assuming Valet is Col 2 (Index 1)
+                const plate = cols[2] || '';
+                const vehicle = cols[3] || '';
+                const cats = cols[4] || '';
+                const note = cols[5] || '';  // This is the note column you were missing
+
+                const catHTML = cats.split(',').map(c => 
+                    c.trim() ? `<span style="background:#e6f2f3; color:#03787c; padding:2px 8px; border-radius:10px; font-size:11px; margin-right:4px;">${c.trim()}</span>` : ''
+                ).join('');
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="color:#777; font-size:12px;">${cols[0]}</td> 
-                    <td style="font-weight:600; color:#333;">${cols[1]}</td>
-                    <td>${cols[2]}</td>
-                    <td>${cats}</td>
-                    <td style="color:#666; font-style:italic;">${cols[4] || ''}</td>
+                    <td style="color:#777; font-size:12px;">${ts}</td>
+                    <td style="font-weight:bold; color:#03787c;">${valet}</td>
+                    <td style="font-weight:600;">${plate}</td>
+                    <td>${vehicle}</td>
+                    <td>${catHTML}</td>
+                    <td style="font-style:italic; color:#555; max-width:200px; overflow:hidden; text-overflow:ellipsis;">${note}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // --- 4. SEARCH FUNCTION ---
+        // --- 3. Search Logic ---
         function filterTable() {
             const term = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allRows.filter(row => {
-                // Join all columns and check if term exists
-                return row.join(' ').toLowerCase().includes(term);
-            });
+            const filtered = allRows.filter(row => row.join(' ').toLowerCase().includes(term));
             renderTable(filtered);
         }
 
-        // --- 5. SORTING FUNCTION ---
+        // --- 4. Sort Logic ---
         function sortTable(n) {
             const table = document.getElementById("dataTable");
-            let switching = true;
-            let dir = "asc"; 
-            let switchcount = 0;
+            let switching = true, dir = "asc", switchcount = 0;
             
-            // Reset header styles
             document.querySelectorAll('th').forEach(th => th.style.color = "");
 
             while (switching) {
@@ -478,15 +456,9 @@
                     const y = rows[i + 1].getElementsByTagName("TD")[n];
                     
                     if (dir == "asc") {
-                        if (x.innerText.toLowerCase() > y.innerText.toLowerCase()) {
-                            shouldSwitch = true;
-                            break;
-                        }
+                        if (x.innerText.toLowerCase() > y.innerText.toLowerCase()) { shouldSwitch = true; break; }
                     } else if (dir == "desc") {
-                        if (x.innerText.toLowerCase() < y.innerText.toLowerCase()) {
-                            shouldSwitch = true;
-                            break;
-                        }
+                        if (x.innerText.toLowerCase() < y.innerText.toLowerCase()) { shouldSwitch = true; break; }
                     }
                 }
                 if (shouldSwitch) {
@@ -494,13 +466,9 @@
                     switching = true;
                     switchcount++; 
                 } else {
-                    if (switchcount == 0 && dir == "asc") {
-                        dir = "desc";
-                        switching = true;
-                    }
+                    if (switchcount == 0 && dir == "asc") { dir = "desc"; switching = true; }
                 }
             }
-            // Highlight active sort column
             table.getElementsByTagName("TH")[n].style.color = "var(--primary)";
         }
 
