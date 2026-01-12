@@ -9,9 +9,12 @@
     
     <style>
         :root {
-            --primary: #03787c;
-            --primary-hover: #025c5f;
-            --primary-light: #e6f2f3;
+            /* JW Marriott Inspired Theme */
+            --primary: #4b0082; /* Deep Regal Purple */
+            --primary-hover: #3a0063;
+            --secondary: #333333; /* JW Gray/Charcoal */
+            --bg-gradient: linear-gradient(135deg, #e0e0e0 0%, #f3f3f3 100%);
+            --accent-light: #f3e5f5; /* Light Purple for tags */
             --bg-image: url('https://i.imgur.com/St8RLPM.jpeg');
             --text-main: #252423;
             --text-light: #605e5c;
@@ -22,7 +25,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--bg-gradient);
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -31,21 +34,21 @@
 
         /* --- 1. Hero Section --- */
         .hero-banner {
-            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), var(--bg-image);
+            background-image: linear-gradient(rgba(30, 30, 30, 0.85), rgba(30, 30, 30, 0.85)), var(--bg-image);
             background-size: cover;
             background-position: center;
             padding: 20px 40px;
             color: white;
             text-align: center;
             flex-shrink: 0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             border-bottom: 4px solid var(--primary);
             position: relative;
             z-index: 10;
         }
 
-        .hero-banner h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .hero-banner p { margin: 6px 0 0 0; opacity: 0.9; font-size: 14px; font-weight: 400; }
+        .hero-banner h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .hero-banner p { margin: 6px 0 0 0; opacity: 0.8; font-size: 14px; font-weight: 400; }
 
         /* --- 2. Main Layout (50/50) --- */
         .main-content {
@@ -54,19 +57,19 @@
             padding: 25px;
             gap: 30px;
             overflow: hidden;
+            background: #dcdcdc; /* Darker gray background for contrast */
         }
 
         /* Panel Styling */
         .panel {
             flex: 1; 
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.6);
-            backdrop-filter: blur(10px);
         }
 
         /* --- LEFT PANEL: FORM --- */
@@ -75,13 +78,14 @@
         .form-header {
             padding: 20px 30px;
             background: #fff;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #e0e0e0;
             position: sticky;
             top: 0;
             z-index: 20;
         }
-        .form-header h2 { margin: 0; color: var(--primary); font-size: 22px; display: flex; align-items: center; gap: 10px; }
-        
+        .form-header h2 { margin: 0; color: var(--secondary); font-size: 22px; display: flex; align-items: center; gap: 10px; }
+        .form-header h2 i { color: var(--primary); }
+
         .form-body { padding: 25px 35px; }
 
         .q-group { margin-bottom: 24px; position: relative; }
@@ -91,11 +95,11 @@
             font-weight: 700; 
             font-size: 13px; 
             margin-bottom: 8px; 
-            color: var(--text-main);
+            color: var(--secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        .desc-text { font-size: 12px; color: #888; margin-top: -6px; margin-bottom: 8px; font-style: italic; }
+        .desc-text { font-size: 12px; color: #777; margin-top: -6px; margin-bottom: 8px; font-style: italic; }
 
         /* Input with Icons */
         .input-wrapper {
@@ -106,15 +110,15 @@
         .input-wrapper i {
             position: absolute;
             left: 14px;
-            color: #999;
+            color: #888;
             font-size: 14px;
             transition: color 0.2s;
         }
         .input-box {
             width: 100%; 
             padding: 12px 15px 12px 40px; /* Space for icon */
-            border: 1px solid transparent; 
-            border-radius: 10px;
+            border: 1px solid #ccc; 
+            border-radius: 8px;
             font-family: inherit; 
             font-size: 14px;
             background-color: var(--input-bg);
@@ -122,7 +126,8 @@
         }
         .input-box:focus { 
             background-color: #fff;
-            box-shadow: 0 0 0 3px rgba(3, 120, 124, 0.15);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(75, 0, 130, 0.15);
             color: var(--text-main);
             outline: none;
         }
@@ -138,38 +143,38 @@
             align-items: center;
             gap: 6px;
             padding: 8px 14px;
-            background-color: #f0f2f5;
+            background-color: #eee;
             border-radius: 20px;
             font-size: 13px;
             color: #555;
             font-weight: 600;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.2s;
             border: 1px solid transparent;
         }
-        .chip-label:hover .chip-text { background-color: #e4e6eb; transform: translateY(-1px); }
+        .chip-label:hover .chip-text { background-color: #e0e0e0; transform: translateY(-1px); }
         .chip-label input:checked ~ .chip-text {
             background-color: var(--primary);
             color: white;
-            box-shadow: 0 4px 10px rgba(3, 120, 124, 0.3);
+            box-shadow: 0 4px 10px rgba(75, 0, 130, 0.3);
             transform: scale(1.05);
         }
 
         /* Submit Button */
         .submit-btn {
-            background: linear-gradient(45deg, var(--primary), #025c5f);
+            background: linear-gradient(45deg, var(--primary), #6a0dad);
             color: white; 
             border: none; 
             padding: 14px; 
             width: 100%;
-            border-radius: 10px; 
+            border-radius: 8px; 
             font-weight: 600; 
             cursor: pointer; 
             margin-top: 15px;
             font-size: 16px;
-            box-shadow: 0 4px 15px rgba(3, 120, 124, 0.3);
+            box-shadow: 0 4px 15px rgba(75, 0, 130, 0.3);
             transition: all 0.2s;
         }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(3, 120, 124, 0.4); }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(75, 0, 130, 0.4); }
 
         /* --- RIGHT PANEL: TABLE --- */
         .table-header-control {
@@ -183,12 +188,12 @@
             width: 100%;
             padding: 10px 15px 10px 40px;
             border-radius: 20px;
-            border: 1px solid #e1dfdd;
-            background: #f9f9f9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") no-repeat 12px center;
+            border: 1px solid #ccc;
+            background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") no-repeat 12px center;
             font-size: 14px;
             transition: all 0.2s;
         }
-        .search-bar:focus { background-color: #fff; border-color: var(--primary); outline: none; }
+        .search-bar:focus { border-color: var(--primary); outline: none; }
 
         .table-wrap {
             flex: 1;
@@ -205,33 +210,35 @@
         thead th {
             position: sticky;
             top: 0;
-            background: #f8f9fa;
-            color: var(--text-light);
-            font-weight: 600;
+            background: #f1f1f1;
+            color: var(--secondary);
+            font-weight: 700;
             text-align: left;
             padding: 14px 18px;
-            border-bottom: 2px solid #e9e9e9;
+            border-bottom: 2px solid #ccc;
             white-space: nowrap;
             cursor: pointer;
             user-select: none;
             z-index: 5;
         }
-        thead th:hover { color: var(--primary); background: #f0f0f0; }
+        /* Visual cue for sorting */
+        thead th:hover { background: #e0e0e0; color: var(--primary); }
+        thead th::after { content: '\2195'; opacity: 0.3; margin-left: 5px; font-weight: normal; }
 
         tbody td {
             padding: 12px 18px;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #eee;
             color: var(--text-main);
             vertical-align: middle;
-            white-space: nowrap; /* Keeps rows neat */
+            white-space: nowrap; 
         }
-        tbody tr:hover { background-color: #f1fcfc; }
+        tbody tr:hover { background-color: #f9f0ff; }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #a0aec0; }
+        ::-webkit-scrollbar-thumb { background: #aaa; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #888; }
 
         @media (max-width: 900px) {
             .main-content { flex-direction: column; height: auto; overflow: auto; }
@@ -251,27 +258,18 @@
         
         <div class="panel form-container">
             <div class="form-header">
-                <h2><i class="fas fa-file-pen"></i> &nbsp;New Log Entry</h2>
+                <h2><i class="fas fa-clipboard-list"></i> &nbsp;Valet Driveway Log</h2>
             </div>
             
             <div class="form-body">
                 <form id="googleForm" target="hidden_iframe" onsubmit="handleSub()" 
-                      action="https://docs.google.com/forms/d/e/YOUR_FORM_ID_HERE/formResponse" method="POST">
+                      action="https://docs.google.com/forms/d/e/1FAIpQLScmnH3czFTZ34dGjE23YuYMMLyTO_JdjA_fjNxMBjz68-ClGg/formResponse" method="POST">
                     
-                    <div class="q-group">
-                        <label class="label">Valet <span style="color:red">*</span></label>
-                        <div class="desc-text">Your Initials: eg. AA</div>
-                        <div class="input-wrapper">
-                            <i class="fas fa-user"></i>
-                            <input type="text" class="input-box" name="entry.000000" placeholder="AA" required autocomplete="off" maxlength="5">
-                        </div>
-                    </div>
-
                     <div class="q-group">
                         <label class="label">License Plate <span style="color:red">*</span></label>
                         <div class="input-wrapper">
                             <i class="fas fa-car-side"></i>
-                            <input type="text" class="input-box" name="entry.111111" placeholder="e.g. AA 1234" required autocomplete="off">
+                            <input type="text" class="input-box" name="entry.1117440668" placeholder="e.g. AA 1234" required autocomplete="off">
                         </div>
                     </div>
 
@@ -279,7 +277,7 @@
                         <label class="label">Make/Model/Color <span style="color:red">*</span></label>
                         <div class="input-wrapper">
                             <i class="fas fa-palette"></i>
-                            <input type="text" class="input-box" name="entry.222222" placeholder="e.g. Honda Civic Black" required autocomplete="off">
+                            <input type="text" class="input-box" name="entry.1311389228" placeholder="e.g. Honda Civic Black" required autocomplete="off">
                         </div>
                     </div>
 
@@ -287,23 +285,23 @@
                         <label class="label">Category</label>
                         <div class="chip-container">
                             <label class="chip-label">
-                                <input type="checkbox" name="entry.333333" value="Legends">
+                                <input type="checkbox" name="entry.267845612" value="Legends">
                                 <span class="chip-text"><i class="fas fa-star"></i> Legends</span>
                             </label>
                             <label class="chip-label">
-                                <input type="checkbox" name="entry.333333" value="Delivery">
+                                <input type="checkbox" name="entry.267845612" value="Delivery">
                                 <span class="chip-text"><i class="fas fa-truck"></i> Delivery</span>
                             </label>
                             <label class="chip-label">
-                                <input type="checkbox" name="entry.333333" value="Pick-up/Drop-off">
+                                <input type="checkbox" name="entry.267845612" value="Pick-up/Drop-off">
                                 <span class="chip-text"><i class="fas fa-people-arrows"></i> Pick-up/Drop-off</span>
                             </label>
                             <label class="chip-label">
-                                <input type="checkbox" name="entry.333333" value="Uber/Taxi">
+                                <input type="checkbox" name="entry.267845612" value="Uber/Taxi">
                                 <span class="chip-text"><i class="fas fa-taxi"></i> Uber/Taxi</span>
                             </label>
                             <label class="chip-label">
-                                <input type="checkbox" name="entry.333333" value="Other">
+                                <input type="checkbox" name="entry.267845612" value="Other">
                                 <span class="chip-text"><i class="fas fa-question-circle"></i> Other</span>
                             </label>
                         </div>
@@ -313,12 +311,21 @@
                         <label class="label">Description / Note</label>
                         <div class="input-wrapper">
                             <i class="fas fa-sticky-note"></i>
-                            <input type="text" class="input-box" name="entry.444444" placeholder="Details (e.g. Parked in fire lane)" autocomplete="off">
+                            <input type="text" class="input-box" name="entry.1086646485" placeholder="Details (e.g. Parked in fire lane)" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="q-group">
+                        <label class="label">Valet <span style="color:red">*</span></label>
+                        <div class="desc-text">Your Initials: eg. AA</div>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user-circle"></i>
+                            <input type="text" class="input-box" name="entry.1346596944" placeholder="AA" required autocomplete="off" maxlength="5">
                         </div>
                     </div>
 
                     <button type="submit" class="submit-btn">
-                        <i class="fas fa-paper-plane"></i> &nbsp;Submit Log
+                        <i class="fas fa-save"></i> &nbsp;Submit Log
                     </button>
                 </form>
             </div>
@@ -338,11 +345,11 @@
                     <thead>
                         <tr>
                             <th onclick="sortTable(0)">Timestamp</th>
-                            <th onclick="sortTable(1)">Valet</th>
-                            <th onclick="sortTable(2)">License Plate</th>
-                            <th onclick="sortTable(3)">Vehicle</th>
-                            <th onclick="sortTable(4)">Category</th>
-                            <th onclick="sortTable(5)">Note</th> 
+                            <th onclick="sortTable(1)">License Plate</th>
+                            <th onclick="sortTable(2)">Vehicle</th>
+                            <th onclick="sortTable(3)">Category</th>
+                            <th onclick="sortTable(4)">Note</th>
+                            <th onclick="sortTable(5)">Valet</th> 
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -369,25 +376,22 @@
                 btn.style.opacity = "1";
                 btn.disabled = false;
                 document.getElementById('googleForm').reset();
-                fetchData();
+                // Reload data after a short delay
+                setTimeout(fetchData, 1000);
             }, 1500);
         }
 
         // --- 2. Fetch Data Logic ---
-        // REPLACE WITH YOUR PUBLISHED CSV URL
         const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT9a2j2_aw4q5RzfchbR_ApILPKP71K36aK8JAORCNJ8kHSR7fAsYdf11An5CitFe6kLELt40BQ_rKd/pub?output=csv";
 
         let allRows = [];
 
         async function fetchData() {
             try {
-                // We add a timestamp to the URL to prevent the browser from caching old data
                 const response = await fetch(SHEET_CSV_URL + "&t=" + Date.now());
                 const data = await response.text();
                 
                 // Parse CSV
-                // This assumes your Google Sheet Columns are in this order:
-                // Timestamp | Valet | Plate | Vehicle | Category | Note
                 const lines = data.split('\n').slice(1);
                 allRows = lines.map(line => {
                     const parts = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
@@ -402,32 +406,50 @@
             }
         }
 
+        // --- Helper: Date Formatter ---
+        // Converts "12/01/2026 00:42:10" to "2026-12-01 00:42"
+        function formatDate(rawDate) {
+            // Check if date matches mm/dd/yyyy hh:mm:ss
+            const parts = rawDate.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})\s(\d{1,2}):(\d{2})/);
+            if (parts) {
+                const mm = parts[1].padStart(2, '0');
+                const dd = parts[2].padStart(2, '0');
+                const yyyy = parts[3];
+                const hh = parts[4].padStart(2, '0');
+                const min = parts[5];
+                return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+            }
+            return rawDate; // Return original if format doesn't match
+        }
+
         function renderTable(data) {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
             
             data.forEach(cols => {
-                // Map columns safely. If a column is missing, show empty string.
-                // You may need to adjust indices [0], [1], etc based on your actual sheet column order.
-                const ts = cols[0] || '';
-                const valet = cols[1] || '--'; // Assuming Valet is Col 2 (Index 1)
-                const plate = cols[2] || '';
-                const vehicle = cols[3] || '';
-                const cats = cols[4] || '';
-                const note = cols[5] || '';  // This is the note column you were missing
+                // Column Mapping based on typical Google Sheet order:
+                // 0: Timestamp, 1: Plate, 2: Vehicle, 3: Category, 4: Note, 5: Valet
+                // Adjust indices if your CSV column order is different.
+                
+                const ts = formatDate(cols[0] || '');
+                const plate = cols[1] || '';
+                const vehicle = cols[2] || '';
+                const cats = cols[3] || '';
+                const note = cols[4] || '';
+                const valet = cols[5] || '--';
 
                 const catHTML = cats.split(',').map(c => 
-                    c.trim() ? `<span style="background:#e6f2f3; color:#03787c; padding:2px 8px; border-radius:10px; font-size:11px; margin-right:4px;">${c.trim()}</span>` : ''
+                    c.trim() ? `<span style="background:#f3e5f5; color:#4b0082; padding:2px 8px; border-radius:10px; font-size:11px; margin-right:4px; border:1px solid #e1bee7;">${c.trim()}</span>` : ''
                 ).join('');
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="color:#777; font-size:12px;">${ts}</td>
-                    <td style="font-weight:bold; color:#03787c;">${valet}</td>
-                    <td style="font-weight:600;">${plate}</td>
+                    <td style="color:#555; font-size:12px; font-family:monospace;">${ts}</td>
+                    <td style="font-weight:700; color:#333;">${plate}</td>
                     <td>${vehicle}</td>
                     <td>${catHTML}</td>
-                    <td style="font-style:italic; color:#555; max-width:200px; overflow:hidden; text-overflow:ellipsis;">${note}</td>
+                    <td style="color:#666; font-style:italic;">${note}</td>
+                    <td style="font-weight:bold; color:#4b0082;">${valet}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -440,12 +462,13 @@
             renderTable(filtered);
         }
 
-        // --- 4. Sort Logic ---
+        // --- 4. Sorting Logic ---
         function sortTable(n) {
             const table = document.getElementById("dataTable");
             let switching = true, dir = "asc", switchcount = 0;
             
-            document.querySelectorAll('th').forEach(th => th.style.color = "");
+            // Clear Sort Icons
+            document.querySelectorAll('thead th').forEach(th => th.style.color = "");
 
             while (switching) {
                 switching = false;
@@ -469,6 +492,7 @@
                     if (switchcount == 0 && dir == "asc") { dir = "desc"; switching = true; }
                 }
             }
+            // Highlight active column
             table.getElementsByTagName("TH")[n].style.color = "var(--primary)";
         }
 
