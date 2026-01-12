@@ -70,6 +70,7 @@
             flex-direction: column;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.6);
+            position: relative;
         }
 
         /* --- LEFT PANEL: FORM --- */
@@ -86,7 +87,7 @@
         .form-header h2 { margin: 0; color: var(--secondary); font-size: 22px; display: flex; align-items: center; gap: 10px; }
         .form-header h2 i { color: var(--primary); }
 
-        .form-body { padding: 25px 35px; }
+        .form-body { padding: 25px 35px; transition: opacity 0.3s ease; }
 
         .q-group { margin-bottom: 24px; position: relative; }
         
@@ -176,6 +177,62 @@
         }
         .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(75, 0, 130, 0.4); }
 
+        /* --- SUCCESS ANIMATION --- */
+        .success-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 4;
+            stroke: var(--primary);
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px var(--primary);
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 4;
+            stroke-miterlimit: 10;
+            stroke: var(--primary);
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        .success-text {
+            margin-top: 20px;
+            font-size: 20px;
+            color: var(--primary);
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1s forwards;
+        }
+
+        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
+        @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+        @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 50px rgba(75,0,130,0.1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+
         /* --- RIGHT PANEL: TABLE --- */
         .table-header-control {
             padding: 15px 25px;
@@ -260,7 +317,15 @@
                 <h2><i class="fas fa-clipboard-list"></i> &nbsp;Valet Driveway Log</h2>
             </div>
             
-            <div class="form-body">
+            <div id="successOverlay" class="success-overlay">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+                <div class="success-text">Log Submitted!</div>
+            </div>
+
+            <div class="form-body" id="formBody">
                 <form id="googleForm" target="hidden_iframe" onsubmit="handleSub()" 
                       action="https://docs.google.com/forms/d/e/1FAIpQLScmnH3czFTZ34dGjE23YuYMMLyTO_JdjA_fjNxMBjz68-ClGg/formResponse" method="POST">
                     
@@ -276,7 +341,7 @@
                         <label class="label">Make/Model/Color <span style="color:red">*</span></label>
                         <div class="input-wrapper">
                             <i class="fas fa-palette"></i>
-                            <input type="text" class="input-box" name="entry.1311389228" placeholder="e.g. Honda Civic Black" required autocomplete="off">
+                            <input type="text" class="input-box" name="entry.1311389228" placeholder="e.g. Honda/Civic/Black" required autocomplete="off">
                         </div>
                     </div>
 
@@ -361,20 +426,26 @@
         // --- 1. Submission Logic ---
         function handleSub() {
             const btn = document.querySelector('.submit-btn');
-            const originalContent = btn.innerHTML;
             
+            // 1. Show Loading State on Button
             btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> &nbsp;Saving...';
             btn.style.opacity = "0.8";
             btn.disabled = true;
             
+            // 2. Wait 1s for the request to go out, then trigger Animation
             setTimeout(() => {
-                alert("Log submitted!");
-                btn.innerHTML = originalContent;
-                btn.style.opacity = "1";
-                btn.disabled = false;
-                document.getElementById('googleForm').reset();
-                setTimeout(fetchData, 1000);
-            }, 1500);
+                // Fade out form
+                document.getElementById('formBody').style.opacity = '0';
+                
+                // Show Success Animation
+                const overlay = document.getElementById('successOverlay');
+                overlay.style.display = 'flex';
+                
+                // 3. Wait 2 seconds for animation, then REFRESH PAGE
+                setTimeout(() => {
+                    location.reload(); 
+                }, 2000);
+            }, 1000);
         }
 
         // --- 2. Fetch Data ---
@@ -425,7 +496,6 @@
                 const vehicle = cols[2] || '';
                 const cats = cols[3] || '';
                 
-                // Mapped correctly based on previous feedback
                 const valet = cols[4] || '--'; 
                 const note = cols[5] || '';    
 
