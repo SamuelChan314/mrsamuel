@@ -9,12 +9,11 @@
     
     <style>
         :root {
-            /* JW Marriott Inspired Theme */
-            --primary: #4b0082; /* Deep Regal Purple */
+            --primary: #4b0082;
             --primary-hover: #3a0063;
-            --secondary: #333333; /* JW Gray/Charcoal */
+            --secondary: #333333; 
             --bg-gradient: linear-gradient(135deg, #e0e0e0 0%, #f3f3f3 100%);
-            --accent-light: #f3e5f5; /* Light Purple for tags */
+            --accent-light: #f3e5f5; 
             --bg-image: url('https://i.imgur.com/St8RLPM.jpeg');
             --text-main: #252423;
             --text-light: #605e5c;
@@ -32,12 +31,10 @@
             overflow: hidden; 
         }
 
-        /* --- 1. Hero Section (UPDATED HEIGHT) --- */
         .hero-banner {
             background-image: linear-gradient(rgba(30, 30, 30, 0.85), rgba(30, 30, 30, 0.85)), var(--bg-image);
             background-size: cover;
             background-position: center;
-            /* Increased padding from 20px to 50px */
             padding: 50px 40px;
             color: white;
             text-align: center;
@@ -51,7 +48,6 @@
         .hero-banner h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .hero-banner p { margin: 8px 0 0 0; opacity: 0.9; font-size: 15px; font-weight: 400; }
 
-        /* --- 2. Main Layout (50/50) --- */
         .main-content {
             display: flex;
             flex: 1; 
@@ -61,7 +57,6 @@
             background: #dcdcdc;
         }
 
-        /* Panel Styling */
         .panel {
             flex: 1; 
             background: rgba(255, 255, 255, 0.96);
@@ -74,7 +69,6 @@
             position: relative;
         }
 
-        /* --- LEFT PANEL: FORM --- */
         .form-container { overflow-y: auto; }
 
         .form-header {
@@ -103,7 +97,6 @@
         }
         .desc-text { font-size: 12px; color: #777; margin-top: -6px; margin-bottom: 8px; font-style: italic; }
 
-        /* Input with Icons */
         .input-wrapper {
             position: relative;
             display: flex;
@@ -135,7 +128,6 @@
         }
         .input-box:focus + i { color: var(--primary); }
 
-        /* Categories */
         .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
         .chip-label { cursor: pointer; position: relative; }
         .chip-label input { position: absolute; opacity: 0; width: 0; height: 0; }
@@ -161,7 +153,6 @@
             transform: scale(1.05);
         }
 
-        /* Submit Button */
         .submit-btn {
             background: linear-gradient(45deg, var(--primary), #6a0dad);
             color: white; 
@@ -178,7 +169,6 @@
         }
         .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(75, 0, 130, 0.4); }
 
-        /* --- SUCCESS ANIMATION --- */
         .success-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -233,8 +223,6 @@
         @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 50px rgba(75,0,130,0.1); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-
-        /* --- RIGHT PANEL: TABLE --- */
         .table-header-control {
             padding: 15px 25px;
             background: #fff;
@@ -424,26 +412,20 @@
     </div>
 
     <script>
-        // --- 1. Validation & Submission Logic ---
         function validateAndSubmit(event) {
-            // 1. Get all checkboxes with the Category entry ID
             const checkboxes = document.querySelectorAll('input[name="entry.267845612"]');
             let isChecked = false;
 
-            // 2. Check if at least one is selected
             checkboxes.forEach(box => {
                 if (box.checked) isChecked = true;
             });
 
-            // 3. If invalid, STOP everything
             if (!isChecked) {
-                event.preventDefault(); // Stop form submission
+                event.preventDefault(); 
                 alert("Please select at least one Category.");
                 return false;
             }
 
-            // 4. If valid, proceed with animation & submission
-            // We do NOT preventDefault here so the form actually submits to the hidden iframe
             startAnimation();
             return true;
         }
@@ -451,28 +433,22 @@
         function startAnimation() {
             const btn = document.querySelector('.submit-btn');
             
-            // Show Loading State on Button
             btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> &nbsp;Saving...';
             btn.style.opacity = "0.8";
             btn.disabled = true;
             
-            // Wait 1s for the data to send
             setTimeout(() => {
-                // Fade out form
                 document.getElementById('formBody').style.opacity = '0';
                 
-                // Show Success Animation
                 const overlay = document.getElementById('successOverlay');
                 overlay.style.display = 'flex';
                 
-                // Wait 2 seconds for animation, then REFRESH PAGE
                 setTimeout(() => {
                     location.reload(); 
                 }, 2000);
             }, 1000);
         }
 
-        // --- 2. Fetch Data ---
         const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT9a2j2_aw4q5RzfchbR_ApILPKP71K36aK8JAORCNJ8kHSR7fAsYdf11An5CitFe6kLELt40BQ_rKd/pub?output=csv";
 
         let allRows = [];
@@ -496,7 +472,6 @@
             }
         }
 
-        // --- Helper: Date Formatter ---
         function formatDate(rawDate) {
             const parts = rawDate.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})\s(\d{1,2}):(\d{2})/);
             if (parts) {
@@ -540,14 +515,12 @@
             });
         }
 
-        // --- 3. Filter ---
         function filterTable() {
             const term = document.getElementById('searchInput').value.toLowerCase();
             const filtered = allRows.filter(row => row.join(' ').toLowerCase().includes(term));
             renderTable(filtered);
         }
 
-        // --- 4. Sorting ---
         function sortTable(columnIndex) {
             const table = document.getElementById("dataTable");
             const tbody = document.getElementById("tableBody");
