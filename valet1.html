@@ -120,7 +120,6 @@
             text-transform: uppercase; letter-spacing: 0.5px;
         }
         .desc-text { font-size: 12px; color: #777; margin-top: -6px; margin-bottom: 8px; font-style: italic; }
-        /* Special red note for security ban */
         .desc-text.urgent { color: #d32f2f; font-weight: 600; }
 
         .input-wrapper { position: relative; display: flex; align-items: center; }
@@ -408,10 +407,9 @@
 
                         <div class="q-group">
                             <label class="label">Details for the Ban</label>
-                            <div class="desc-text">Reason of the ban, include expiry date if it is a temporary ban.</div>
                             <div class="input-wrapper">
                                 <i class="fas fa-comment-slash"></i>
-                                <input type="text" class="input-box" name="entry.1086646485" placeholder="Reason..." autocomplete="off">
+                                <input type="text" class="input-box" name="entry.1086646485" placeholder="Reason of the ban, include expiry date if it is a temporary ban." autocomplete="off">
                             </div>
                         </div>
                         
@@ -509,12 +507,10 @@
         }
 
         function validateAndSubmitBan(event) {
-            // Validate Ban Type (Radio)
             const banTypes = document.querySelectorAll('#googleFormBan input[name="entry.267845612"]');
             let typeChecked = false;
             banTypes.forEach(r => { if (r.checked) typeChecked = true; });
 
-            // Validate Approved By (Radio)
             const approvedBy = document.querySelectorAll('#googleFormBan input[name="entry.1346596944"]');
             let appChecked = false;
             approvedBy.forEach(r => { if (r.checked) appChecked = true; });
