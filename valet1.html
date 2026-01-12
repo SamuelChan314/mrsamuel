@@ -3,393 +3,389 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Inquiry Form</title>
+    <title>Modern Inquiry Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #673ab7; /* Deep Purple similar to Forms */
-            --primary-light: #ede7f6;
-            --text-color: #202124;
-            --border-color: #dadce0;
-            --error-color: #d93025;
-            --bg-color: #f0ebf8;
-            --card-bg: #ffffff;
-            --focus-blue: #4285f4;
+            --primary: #4f46e5; /* Indigo */
+            --primary-hover: #4338ca;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --input-bg: #f9fafb;
+            --error: #ef4444;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Roboto', 'Segoe UI', sans-serif;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
+            background: var(--bg-gradient);
+            min-height: 100vh;
             display: flex;
+            align-items: center;
             justify-content: center;
             padding: 20px;
-            min-height: 100vh;
         }
 
-        /* Container */
-        .form-container {
+        /* Main Container */
+        .container {
+            background: #ffffff;
             width: 100%;
-            max-width: 640px;
-            margin-top: 12px;
-        }
-
-        /* Top Header Stripe */
-        .form-header-stripe {
-            height: 10px;
-            background-color: var(--primary-color);
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            width: 100%;
-        }
-
-        /* Cards */
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 12px;
-            position: relative;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .card.active {
-            border-left: 6px solid var(--focus-blue);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-        }
-
-        .title-card {
-            border-top: none;
-            border-top-left-radius: 0;
-            border-top-right-radius: 0;
-        }
-
-        h1 {
-            font-size: 32px;
-            font-weight: 400;
-            color: var(--text-color);
-            margin-bottom: 12px;
-        }
-
-        .description {
-            font-size: 14px;
-            color: #5f6368;
-            line-height: 1.5;
-        }
-
-        .required-note {
-            color: var(--error-color);
-            font-size: 12px;
-            margin-top: 10px;
-            display: block;
-        }
-
-        /* Input Groups */
-        .input-group {
-            margin-bottom: 5px;
-            position: relative;
-        }
-
-        .question-label {
-            font-size: 16px;
-            color: var(--text-color);
-            margin-bottom: 16px;
-            display: block;
-        }
-
-        .required-star {
-            color: var(--error-color);
-        }
-
-        /* Text Inputs */
-        .text-input {
-            width: 100%;
-            border: none;
-            border-bottom: 1px solid var(--border-color);
-            padding: 8px 0;
-            font-size: 14px;
-            outline: none;
-            background: transparent;
-            transition: border-bottom 0.3s;
-        }
-
-        .text-input:focus {
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .text-input::placeholder {
-            color: #70757a;
-        }
-
-        /* Radio & Checkboxes */
-        .option-group {
+            max-width: 1000px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-            cursor: pointer;
+            overflow: hidden;
+            min-height: 600px;
         }
 
-        .option-group input {
-            margin-right: 12px;
-            accent-color: var(--primary-color);
-            width: 18px;
-            height: 18px;
-        }
-
-        .option-group label {
-            font-size: 14px;
-            color: var(--text-color);
-            cursor: pointer;
-        }
-
-        /* Buttons */
-        .button-row {
+        /* Left Side - Visuals */
+        .visual-side {
+            flex: 1;
+            background: linear-gradient(rgba(79, 70, 229, 0.85), rgba(67, 56, 202, 0.9)), 
+                        url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 40px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        button.submit-btn {
-            background-color: var(--primary-color);
+            flex-direction: column;
+            justify-content: center;
             color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 4px;
+            position: relative;
+        }
+
+        .visual-content h2 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .visual-content p {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Right Side - Form */
+        .form-side {
+            flex: 1.2;
+            padding: 50px;
+            position: relative;
+        }
+
+        .form-header {
+            margin-bottom: 40px;
+        }
+
+        .form-header h3 {
+            color: var(--text-dark);
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .form-header p {
+            color: var(--text-light);
             font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Floating Label Inputs */
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 15px 15px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            color: var(--text-dark);
+            background: var(--input-bg);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        /* Label Styling */
+        .input-label {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: var(--text-light);
+            font-size: 15px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            padding: 0 5px;
+        }
+
+        /* Animation State: Focus or Has Content */
+        .input-field:focus,
+        .input-field:not(:placeholder-shown) {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .input-field:focus ~ .input-label,
+        .input-field:not(:placeholder-shown) ~ .input-label {
+            top: 0;
+            transform: translateY(-50%) scale(0.9);
+            color: var(--primary);
+            background: #fff;
             font-weight: 500;
+        }
+
+        /* Select Styling */
+        select.input-field {
             cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        button.submit-btn:hover {
-            background-color: #552d9e;
-            box-shadow: 0 1px 2px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-        }
-
-        button.clear-btn {
-            background: none;
-            border: none;
-            color: var(--primary-color);
-            font-weight: 500;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        button.clear-btn:hover {
-            background-color: var(--primary-light);
-            border-radius: 4px;
-            padding: 5px 10px;
-        }
-
-        /* Validation */
-        .error-message {
-            display: none;
-            color: var(--error-color);
-            font-size: 12px;
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
+            appearance: none;
         }
         
-        .error-message i {
-            margin-right: 5px;
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
         }
 
-        .input-error {
-            border-bottom-color: var(--error-color) !important;
+        .submit-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
         }
 
-        /* Progress Bar (hidden by default) */
-        .progress-overlay {
-            position: fixed;
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Error States */
+        .input-group.error .input-field {
+            border-color: var(--error);
+        }
+        
+        .input-group.error .input-label {
+            color: var(--error);
+        }
+
+        .error-msg {
+            display: none;
+            color: var(--error);
+            font-size: 12px;
+            margin-top: 5px;
+            margin-left: 5px;
+        }
+
+        .input-group.error .error-msg {
+            display: block;
+        }
+
+        /* Success Overlay */
+        .success-overlay {
+            position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(255,255,255,0.8);
-            display: none;
+            background: white;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
         }
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        .success-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .check-icon {
+            width: 80px;
+            height: 80px;
+            background: #d1fae5;
+            color: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                max-width: 400px;
+            }
+            .visual-side {
+                display: none; /* Hide image on mobile for cleaner look */
+            }
+            .form-side {
+                padding: 30px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <form class="form-container" id="mainForm">
-        <div class="form-header-stripe"></div>
-        <div class="card title-card">
-            <h1>Contact & Inquiry Form</h1>
-            <p class="description">Please fill out this form to request services or get in touch with our team. We will respond within 24 hours.</p>
-            <span class="required-note">* Indicates required question</span>
-        </div>
-
-        <div class="card input-card" onclick="focusCard(this)">
-            <label class="question-label">Full Name <span class="required-star">*</span></label>
-            <div class="input-group">
-                <input type="text" class="text-input" id="name" placeholder="Your answer" required>
-            </div>
-            <div class="error-message" id="nameError">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#d93025"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                &nbsp; This is a required question
+    <div class="container">
+        <div class="visual-side">
+            <div class="visual-content">
+                <h2>Let's build something<br>amazing together.</h2>
+                <p>Fill out the form and our team will get back to you within 24 hours.</p>
             </div>
         </div>
 
-        <div class="card input-card" onclick="focusCard(this)">
-            <label class="question-label">Email Address <span class="required-star">*</span></label>
-            <div class="input-group">
-                <input type="email" class="text-input" id="email" placeholder="Your email" required>
+        <div class="form-side">
+            <div class="success-overlay" id="successMessage">
+                <div class="check-icon">✓</div>
+                <h3>Message Sent!</h3>
+                <p style="color: #6b7280; margin-top: 10px;">We'll be in touch shortly.</p>
+                <button class="submit-btn" onclick="resetForm()" style="margin-top: 20px; width: auto; padding: 10px 30px;">Send Another</button>
             </div>
-            <div class="error-message" id="emailError">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#d93025"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                &nbsp; Please enter a valid email
-            </div>
+
+            <form id="proForm">
+                <div class="form-header">
+                    <h3>Get in touch</h3>
+                    <p>We'd love to hear about your project.</p>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" class="input-field" id="name" placeholder=" " autocomplete="off">
+                    <label class="input-label" for="name">Full Name</label>
+                    <span class="error-msg">Please enter your name</span>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" class="input-field" id="email" placeholder=" " autocomplete="off">
+                    <label class="input-label" for="email">Email Address</label>
+                    <span class="error-msg">Please enter a valid email</span>
+                </div>
+
+                <div class="input-group">
+                    <select class="input-field" id="service" style="background-color: transparent;">
+                        <option value="" disabled selected hidden></option> <option value="web">Web Development</option>
+                        <option value="design">Product Design</option>
+                        <option value="marketing">SEO & Marketing</option>
+                    </select>
+                    <label class="input-label" for="service">Interested Service</label>
+                    <span class="error-msg">Please select a service</span>
+                </div>
+
+                <div class="input-group">
+                    <textarea class="input-field" id="message" rows="4" placeholder=" " style="resize: none; height: auto;"></textarea>
+                    <label class="input-label" for="message">Project Details</label>
+                    <span class="error-msg">Please describe your project</span>
+                </div>
+
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
         </div>
-
-        <div class="card input-card" onclick="focusCard(this)">
-            <label class="question-label">Service Type</label>
-            
-            <div class="option-group">
-                <input type="radio" name="service" id="web" value="Web Development">
-                <label for="web">Web Development</label>
-            </div>
-            <div class="option-group">
-                <input type="radio" name="service" id="design" value="UI/UX Design">
-                <label for="design">UI/UX Design</label>
-            </div>
-            <div class="option-group">
-                <input type="radio" name="service" id="marketing" value="Marketing">
-                <label for="marketing">Digital Marketing</label>
-            </div>
-            <div class="option-group">
-                <input type="radio" name="service" id="other" value="Other">
-                <label for="other">Other</label>
-            </div>
-        </div>
-
-        <div class="card input-card" onclick="focusCard(this)">
-            <label class="question-label">Project Details <span class="required-star">*</span></label>
-            <div class="input-group">
-                <input type="text" class="text-input" id="details" placeholder="Your answer" required>
-            </div>
-            <div class="error-message" id="detailsError">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#d93025"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                &nbsp; This is a required question
-            </div>
-        </div>
-
-        <div class="button-row">
-            <button type="submit" class="submit-btn">Submit</button>
-            <button type="button" class="clear-btn" onclick="clearForm()">Clear form</button>
-        </div>
-
-    </form>
-
-    <div class="progress-overlay" id="spinner">
-        <div class="spinner"></div>
     </div>
 
     <script>
-        // UI Interaction: Card Focus Effect
-        function focusCard(card) {
-            // Remove active class from all cards
-            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-            // Add active class to clicked card
-            card.classList.add('active');
-        }
-
-        // Form Submission Logic
-        const form = document.getElementById('mainForm');
+        const form = document.getElementById('proForm');
         
         form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Stop actual submission
-
+            e.preventDefault();
             let isValid = true;
 
-            // Validate Name
-            const nameInput = document.getElementById('name');
-            const nameError = document.getElementById('nameError');
-            if(nameInput.value.trim() === "") {
-                nameError.style.display = 'flex';
-                nameInput.classList.add('input-error');
+            // 1. Validate Name
+            const name = document.getElementById('name');
+            if (name.value.trim() === '') {
+                setError(name);
                 isValid = false;
             } else {
-                nameError.style.display = 'none';
-                nameInput.classList.remove('input-error');
+                clearError(name);
             }
 
-            // Validate Email
-            const emailInput = document.getElementById('email');
-            const emailError = document.getElementById('emailError');
+            // 2. Validate Email
+            const email = document.getElementById('email');
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if(!emailRegex.test(emailInput.value)) {
-                emailError.style.display = 'flex';
-                emailInput.classList.add('input-error');
+            if (!emailRegex.test(email.value)) {
+                setError(email);
                 isValid = false;
             } else {
-                emailError.style.display = 'none';
-                emailInput.classList.remove('input-error');
+                clearError(email);
             }
 
-            // Validate Details
-            const detailsInput = document.getElementById('details');
-            const detailsError = document.getElementById('detailsError');
-            if(detailsInput.value.trim() === "") {
-                detailsError.style.display = 'flex';
-                detailsInput.classList.add('input-error');
+            // 3. Validate Service
+            const service = document.getElementById('service');
+            if (service.value === '') {
+                setError(service);
                 isValid = false;
             } else {
-                detailsError.style.display = 'none';
-                detailsInput.classList.remove('input-error');
+                clearError(service);
             }
 
-            if(isValid) {
-                // Simulate Submission
-                document.getElementById('spinner').style.display = 'flex';
+            // 4. Validate Message
+            const message = document.getElementById('message');
+            if (message.value.trim() === '') {
+                setError(message);
+                isValid = false;
+            } else {
+                clearError(message);
+            }
+
+            // If Valid, Simulate Submission
+            if (isValid) {
+                const btn = document.querySelector('.submit-btn');
+                const originalText = btn.innerText;
+                
+                // Loading State
+                btn.innerText = "Sending...";
+                btn.style.opacity = "0.7";
+
                 setTimeout(() => {
-                    document.getElementById('spinner').style.display = 'none';
-                    alert("Form submitted successfully!");
-                    clearForm();
+                    btn.innerText = originalText;
+                    btn.style.opacity = "1";
+                    document.getElementById('successMessage').classList.add('active');
                 }, 1500);
             }
         });
 
-        // Clear Form Logic
-        function clearForm() {
-            form.reset();
-            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.text-input').forEach(el => el.classList.remove('input-error'));
-            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-            window.scrollTo(0,0);
+        // Helper: Set Error Class
+        function setError(input) {
+            input.parentElement.classList.add('error');
         }
 
-        // Real-time validation removal on input
-        document.querySelectorAll('.text-input').forEach(input => {
-            input.addEventListener('input', function() {
-                if(this.value.trim() !== "") {
-                    this.classList.remove('input-error');
-                    // Find the sibling error message within the same card
-                    let parentCard = this.closest('.card');
-                    if(parentCard.querySelector('.error-message')) {
-                        parentCard.querySelector('.error-message').style.display = 'none';
-                    }
-                }
+        // Helper: Clear Error Class
+        function clearError(input) {
+            input.parentElement.classList.remove('error');
+        }
+
+        // Helper: Reset Form for new submission
+        function resetForm() {
+            document.getElementById('successMessage').classList.remove('active');
+            form.reset();
+            // Remove all error classes
+            document.querySelectorAll('.input-group').forEach(group => group.classList.remove('error'));
+        }
+
+        // Real-time error removal
+        document.querySelectorAll('.input-field').forEach(item => {
+            item.addEventListener('input', () => {
+                clearError(item);
             });
         });
     </script>
+
 </body>
 </html>
