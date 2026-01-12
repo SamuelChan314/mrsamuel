@@ -420,10 +420,10 @@
                         </div>
 
                         <div class="q-group">
-                            <label class="label">Details for the Ban</label>
+                            <label class="label">Details for the Ban <span style="color:red">*</span></label>
                             <div class="input-wrapper">
                                 <i class="fas fa-comment-slash"></i>
-                                <textarea class="input-box" name="entry.1086646485" placeholder="Reason of the ban, include expiry date if it is a temporary ban." autocomplete="off"></textarea>
+                                <textarea class="input-box" name="entry.1086646485" placeholder="Reason of the ban, include expiry date if it is a temporary ban." required autocomplete="off"></textarea>
                             </div>
                         </div>
                         
@@ -528,6 +528,13 @@
             const approvedBy = document.querySelectorAll('#googleFormBan input[name="entry.1346596944"]');
             let appChecked = false;
             approvedBy.forEach(r => { if (r.checked) appChecked = true; });
+
+            const reason = document.querySelector('#googleFormBan textarea[name="entry.1086646485"]').value;
+            if (!reason.trim()) {
+                 event.preventDefault();
+                 alert("Please enter the details/reason for the ban.");
+                 return false;
+            }
 
             if (!typeChecked) {
                 event.preventDefault(); 
