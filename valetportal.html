@@ -123,18 +123,14 @@
         .desc-text.urgent { color: #d32f2f; font-weight: 600; }
 
         .input-wrapper { position: relative; display: flex; align-items: center; }
-        
-        /* Adjusted icon position for flexibility */
         .input-wrapper i { 
             position: absolute; 
             left: 14px; 
             color: #888; 
             font-size: 14px; 
             transition: color 0.2s;
-            /* If it's a textarea, stick icon to top */
             top: 14px; 
         }
-
         .input-box {
             width: 100%; padding: 12px 15px 12px 40px; 
             border: 1px solid #ccc; border-radius: 8px;
@@ -143,10 +139,9 @@
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        /* Specific Style for Textarea */
         textarea.input-box {
-            resize: vertical; /* Allow user to drag height */
-            min-height: 80px; /* Start taller */
+            resize: vertical; 
+            min-height: 80px; 
             line-height: 1.5;
         }
 
@@ -639,7 +634,7 @@
                         <td style="font-weight:700; color:#333;">${plate}</td>
                         <td>${vehicle}</td>
                         <td>${catHTML}</td>
-                        <td style="color:#666; white-space:normal; max-width:350px;">${field5}</td>
+                        <td style="color:#666; white-space:normal; min-width:300px;">${field5}</td>
                         <td style="font-weight:bold; color:${tagColor};">${field4}</td>
                     `;
                 } else {
@@ -648,7 +643,7 @@
                         <td style="font-weight:700; color:#333;">${plate}</td>
                         <td>${vehicle}</td>
                         <td>${catHTML}</td>
-                        <td style="color:#666; white-space:normal; max-width:350px;">${field4}</td>
+                        <td style="color:#666; white-space:normal; min-width:300px;">${field4}</td>
                         <td style="font-weight:bold; color:${tagColor};">${field5}</td>
                     `;
                 }
