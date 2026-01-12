@@ -3,298 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inquiry Form</title>
+    <title>JWYEG Valet Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* 1. Base Setup & Font (Microsoft Style) */
         :root {
-            --primary: #03787c; /* MS Forms Teal */
-            --primary-dark: #025c5f;
+            --primary: #03787c; /* Microsoft Teal */
+            --primary-hover: #025c5f;
             --bg-image: url('https://i.imgur.com/St8RLPM.jpeg');
-            --glass-bg: rgba(255, 255, 255, 0.92);
+            --glass-bg: rgba(255, 255, 255, 0.95);
             --text-main: #252423;
-            --text-secondary: #605e5c;
+            --text-light: #605e5c;
+            --border: #e1dfdd;
             --error: #a80000;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', 'Segoe WP', Tahoma, Arial, sans-serif;
-            background-image: var(--bg-image);
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center; /* Centers vertically */
-        }
-
-        /* 2. The Main Container */
-        .form-container {
-            width: 100%;
-            max-width: 640px;
-            background-color: var(--glass-bg);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-            margin: 20px;
-            border-radius: 8px; /* Slightly softer corners */
-            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f3f2f1;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(8px); /* The "Frosted Glass" effect */
-            -webkit-backdrop-filter: blur(8px);
+            overflow-x: hidden;
         }
 
-        /* 3. Header Section */
-        .form-header {
-            padding: 32px 32px 20px 32px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            background: white;
+        /* --- 1. Top Hero Section --- */
+        .hero-banner {
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), var(--bg-image);
+            background-size: cover;
+            background-position: center;
+            padding: 60px 40px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            flex-shrink: 0;
         }
 
-        .form-header h1 {
-            font-size: 28px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 8px;
-            margin-top: 0;
+        .hero-banner h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            letter-spacing: 0.5px;
         }
 
-        .form-header p {
-            font-size: 15px;
-            color: var(--text-secondary);
-            line-height: 1.5;
+        .hero-banner p {
+            font-size: 16px;
+            opacity: 0.9;
             margin: 0;
         }
 
-        /* 4. Form Body */
+        /* --- 2. Main Split Container --- */
+        .main-content {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+            height: calc(100vh - 200px); /* Fill remaining height */
+            box-sizing: border-box;
+        }
+
+        /* --- Left Side: The Form --- */
+        .form-panel {
+            flex: 0 0 400px; /* Fixed width for form */
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow-y: auto; /* Scrollable if form is long */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-header-stripe {
+            height: 8px;
+            background-color: var(--primary);
+            width: 100%;
+        }
+
         .form-body {
-            padding: 10px 32px 32px 32px;
+            padding: 24px;
         }
 
-        /* 5. Question Cards */
-        .question-group {
-            background: transparent;
-            margin-bottom: 24px;
-            margin-top: 20px;
-            transition: all 0.2s ease;
-        }
-
-        .question-label {
-            font-size: 16px;
+        .form-title {
+            font-size: 24px;
             font-weight: 600;
             color: var(--text-main);
             margin-bottom: 8px;
-            display: block;
         }
 
-        .required-star {
-            color: var(--error);
-            margin-left: 4px;
+        .form-desc {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+            line-height: 1.5;
         }
 
-        /* 6. Inputs (Modern & Clean) */
-        .input-control {
-            width: 100%;
-            padding: 10px 12px;
-            font-size: 15px;
-            font-family: inherit;
-            color: var(--text-main);
-            border: 1px solid #8a8886; /* Neutral border */
+        /* Questions */
+        .q-group {
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 10px;
             border-radius: 4px;
-            background: rgba(255,255,255,0.8);
-            transition: all 0.2s;
+            transition: box-shadow 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .q-group:focus-within {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left-color: var(--primary);
+        }
+
+        .label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .req { color: var(--error); }
+
+        .input-box {
+            width: 100%;
+            padding: 8px 10px;
+            font-size: 14px;
+            border: 1px solid #8a8886;
+            border-radius: 4px;
             outline: none;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        .input-control:hover {
-            border-color: #323130;
-        }
-
-        .input-control:focus {
+        .input-box:focus {
             border-color: var(--primary);
             border-bottom-width: 2px;
-            background: #ffffff;
-            box-shadow: inset 0 -1px 0 0 var(--primary); /* Bottom highlight */
         }
 
-        textarea.input-control {
-            resize: vertical;
-            min-height: 100px;
+        /* Checkboxes for Quick Category */
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .checkbox-group input {
+            margin-right: 10px;
+            accent-color: var(--primary);
+            width: 16px; height: 16px;
         }
 
-        /* 7. Button */
+        /* Submit Button */
         .submit-btn {
             background-color: var(--primary);
             color: white;
+            border: none;
+            padding: 10px 24px;
             font-size: 14px;
             font-weight: 600;
-            padding: 10px 24px;
-            border: none;
             border-radius: 4px;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            transition: background-color 0.2s;
+            transition: background 0.2s;
             margin-top: 10px;
         }
+        .submit-btn:hover { background-color: var(--primary-hover); }
 
-        .submit-btn:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .submit-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        /* 8. Validation Feedback */
-        .error-msg {
-            display: none;
-            color: var(--error);
-            font-size: 12px;
-            margin-top: 6px;
-            align-items: center;
-        }
-        
-        .input-control.error {
-            border-color: var(--error);
+        /* --- Right Side: The Database (Google Sheet) --- */
+        .data-panel {
+            flex: 1; /* Takes remaining space */
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* 9. Success Overlay */
-        .success-view {
-            display: none;
-            text-align: center;
-            padding: 60px 40px;
-        }
-        .success-icon {
-            font-size: 48px;
-            color: var(--primary);
-            margin-bottom: 16px;
+        .panel-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--text-main);
         }
 
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            .form-container {
-                margin: 0;
-                height: 100vh;
-                border-radius: 0;
-                max-width: 100%;
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 900px) {
+            .main-content {
+                flex-direction: column;
+                height: auto;
             }
-            .form-header, .form-body {
-                padding: 20px;
+            .form-panel, .data-panel {
+                flex: none;
+                width: 100%;
+                min-height: 500px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="form-container">
+    <div class="hero-banner">
+        <h1>JWYEG Valet Portal</h1>
+        <p>Log and view all drivers who ignored our policies or instructions.</p>
+    </div>
+
+    <div class="main-content">
         
-        <div id="formView">
-            <div class="form-header">
-                <h1>Contact Us</h1>
-                <p>Please fill out the details below. We usually respond to all inquiries within one business day.</p>
+        <div class="form-panel">
+            <div class="form-header-stripe"></div>
+            <div class="form-body">
+                <div class="form-title">Valet Driveway Log</div>
+                <p class="form-desc">Log any drivers that have ignored our policies or instructions.</p>
+
+                <form id="valetForm">
+                    
+                    <div class="q-group">
+                        <label class="label">License Plate <span class="req">*</span></label>
+                        <input type="text" class="input-box" id="plate" placeholder="e.g. AA 1234" required>
+                    </div>
+
+                    <div class="q-group">
+                        <label class="label">Make/Model/Colour <span class="req">*</span></label>
+                        <input type="text" class="input-box" id="vehicle" placeholder="e.g. Honda/HR-V/White" required>
+                    </div>
+
+                    <div class="q-group">
+                        <label class="label">Quick Category</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="category" value="Legends"> Legends</label>
+                            <label><input type="checkbox" name="category" value="Delivery"> Delivery</label>
+                            <label><input type="checkbox" name="category" value="Pick-up/Drop-off"> Pick-up/Drop-off</label>
+                            <label><input type="checkbox" name="category" value="Uber/Taxi"> Uber/Taxi</label>
+                            <label><input type="checkbox" name="category" value="Other"> Other</label>
+                        </div>
+                    </div>
+
+                    <div class="q-group">
+                        <label class="label">Valet Name</label>
+                        <input type="text" class="input-box" id="valetName" placeholder="Your name">
+                    </div>
+
+                    <div class="q-group">
+                        <label class="label">Description</label>
+                        <textarea class="input-box" id="description" rows="3" placeholder="Details on why we logged this vehicle"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Submit Log</button>
+                </form>
             </div>
-
-            <form class="form-body" id="msForm">
-                
-                <div class="question-group">
-                    <label class="question-label">Full Name <span class="required-star">*</span></label>
-                    <input type="text" class="input-control" id="name" placeholder="Enter your answer">
-                    <div class="error-msg">This question is required.</div>
-                </div>
-
-                <div class="question-group">
-                    <label class="question-label">Email Address <span class="required-star">*</span></label>
-                    <input type="email" class="input-control" id="email" placeholder="Enter your answer">
-                    <div class="error-msg">Please enter a valid email address.</div>
-                </div>
-
-                <div class="question-group">
-                    <label class="question-label">Topic</label>
-                    <select class="input-control" id="topic">
-                        <option value="" disabled selected>Select your option</option>
-                        <option value="general">General Inquiry</option>
-                        <option value="support">Technical Support</option>
-                        <option value="sales">Sales & Billing</option>
-                    </select>
-                </div>
-
-                <div class="question-group">
-                    <label class="question-label">Message <span class="required-star">*</span></label>
-                    <textarea class="input-control" id="message" placeholder="Enter your answer"></textarea>
-                    <div class="error-msg">This question is required.</div>
-                </div>
-
-                <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
-
-            </form>
         </div>
 
-        <div class="success-view" id="successView">
-            <div class="success-icon">✓</div>
-            <h2 style="color: var(--primary); margin-top:0;">Thanks!</h2>
-            <p>Your response was submitted.</p>
-            <button class="submit-btn" style="background:transparent; color:#666; border:1px solid #ccc; box-shadow:none;" onclick="location.reload()">Submit another response</button>
+        <div class="data-panel">
+            <div class="panel-header">Driveway Log Database</div>
+            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT9a2j2_aw4q5RzfchbR_ApILPKP71K36aK8JAORCNJ8kHSR7fAsYdf11An5CitFe6kLELt40BQ_rKd/pubhtml?widget=true&headers=false"></iframe>
         </div>
 
     </div>
 
     <script>
-        document.getElementById('msForm').addEventListener('submit', function(e) {
+        // FORM SUBMISSION LOGIC
+        // Ideally, you should connect this to a backend like Formspree or Google Sheets API.
+        // Below is a simulation.
+        
+        document.getElementById('valetForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            const btn = document.querySelector('.submit-btn');
             
-            let isValid = true;
-            
-            // Validation Helper
-            function validateField(id, condition) {
-                const el = document.getElementById(id);
-                const parent = el.parentElement;
-                const error = parent.querySelector('.error-msg');
-                
-                if(!condition) {
-                    el.classList.add('error');
-                    error.style.display = 'flex';
-                    return false;
-                } else {
-                    el.classList.remove('error');
-                    error.style.display = 'none';
-                    return true;
-                }
-            }
+            // Visual Feedback
+            btn.innerHTML = "Submitting...";
+            btn.style.opacity = "0.7";
 
-            // 1. Name Check
-            const nameValid = validateField('name', document.getElementById('name').value.trim() !== "");
-            
-            // 2. Email Check
-            const emailVal = document.getElementById('email').value;
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const emailValid = validateField('email', emailRegex.test(emailVal));
-
-            // 3. Message Check
-            const msgValid = validateField('message', document.getElementById('message').value.trim() !== "");
-
-            if(nameValid && emailValid && msgValid) {
-                const btn = document.getElementById('submitBtn');
-                const originalText = btn.innerText;
-                
-                btn.innerText = "Submitting...";
-                btn.disabled = true;
-
-                // Simulate Network Request
-                setTimeout(() => {
-                    document.getElementById('formView').style.display = 'none';
-                    document.getElementById('successView').style.display = 'block';
-                }, 1000);
-            }
-        });
-
-        // Clear errors on input
-        document.querySelectorAll('.input-control').forEach(input => {
-            input.addEventListener('input', function() {
-                this.classList.remove('error');
-                this.parentElement.querySelector('.error-msg').style.display = 'none';
-            });
+            // Simulate delay
+            setTimeout(() => {
+                alert("Log Submitted Successfully! (This is a preview - connect your backend to save data)");
+                btn.innerHTML = "Submit Log";
+                btn.style.opacity = "1";
+                document.getElementById('valetForm').reset();
+            }, 1000);
         });
     </script>
 </body>
