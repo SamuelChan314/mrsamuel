@@ -9,7 +9,6 @@
     
     <style>
         :root {
-            /* SHARED VARIABLES */
             --secondary: #333333; 
             --bg-gradient: linear-gradient(135deg, #e0e0e0 0%, #f3f3f3 100%);
             --input-bg: #f8f9fa;
@@ -17,15 +16,13 @@
             --text-light: #605e5c;
             --bg-image: url('https://i.imgur.com/St8RLPM.jpeg');
 
-            /* DEFAULT THEME (LOG - PURPLE) */
             --primary: #4b0082; 
             --primary-hover: #3a0063;
             --accent-light: #f3e5f5;
         }
 
-        /* BAN THEME OVERRIDE CLASS */
         .theme-red {
-            --primary: #8b0000; /* Deep Red */
+            --primary: #8b0000; 
             --primary-hover: #600000;
             --accent-light: #ffebee;
         }
@@ -39,11 +36,10 @@
             overflow: hidden; 
         }
 
-        /* --- HERO SECTION WITH TABS --- */
         .hero-banner {
             background-image: linear-gradient(rgba(30, 30, 30, 0.85), rgba(30, 30, 30, 0.85)), var(--bg-image);
             background-size: cover; background-position: center;
-            padding: 30px 40px 0 40px; /* Bottom padding removed for tabs */
+            padding: 30px 40px 0 40px; 
             color: white; text-align: center;
             flex-shrink: 0;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
@@ -55,7 +51,6 @@
         .hero-banner h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .hero-banner p { margin: 8px 0 20px 0; opacity: 0.9; font-size: 15px; font-weight: 400; }
 
-        /* TABS Styling */
         .tabs-container {
             display: flex; justify-content: center; gap: 10px;
         }
@@ -69,7 +64,7 @@
             border-radius: 8px 8px 0 0;
             transition: all 0.2s;
             position: relative;
-            top: 4px; /* Push down to sit on border */
+            top: 4px; 
         }
         .tab-btn:hover { background: rgba(255,255,255,0.2); color: white; }
         .tab-btn.active {
@@ -78,12 +73,9 @@
             font-weight: 700;
             box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
         }
-        /* Red active state for Ban tab */
         .tab-btn.active.red-tab { color: #8b0000; }
         .tab-btn.active.purple-tab { color: #4b0082; }
 
-
-        /* --- MAIN LAYOUT --- */
         .main-content {
             display: flex; flex: 1; 
             padding: 25px; gap: 30px;
@@ -91,9 +83,8 @@
             background: #dcdcdc;
         }
         
-        /* Utility to hide/show views */
         .view-section {
-            display: none; /* Hidden by default */
+            display: none; 
             flex: 1;
             gap: 30px;
             height: 100%;
@@ -101,7 +92,6 @@
         }
         .view-section.active { display: flex; }
 
-        /* Panel Styling */
         .panel {
             flex: 1; 
             background: rgba(255, 255, 255, 0.96);
@@ -113,7 +103,6 @@
             position: relative;
         }
 
-        /* --- FORM STYLES --- */
         .form-container { overflow-y: auto; }
         .form-header {
             padding: 20px 30px; background: #fff;
@@ -131,6 +120,8 @@
             text-transform: uppercase; letter-spacing: 0.5px;
         }
         .desc-text { font-size: 12px; color: #777; margin-top: -6px; margin-bottom: 8px; font-style: italic; }
+        /* Special red note for security ban */
+        .desc-text.urgent { color: #d32f2f; font-weight: 600; }
 
         .input-wrapper { position: relative; display: flex; align-items: center; }
         .input-wrapper i { position: absolute; left: 14px; color: #888; font-size: 14px; transition: color 0.2s; }
@@ -143,12 +134,11 @@
         }
         .input-box:focus { 
             background-color: #fff; border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(100,100,100, 0.15); /* Neutral shadow, colored by theme */
+            box-shadow: 0 0 0 3px rgba(100,100,100, 0.15); 
             color: var(--text-main); outline: none;
         }
         .input-box:focus + i { color: var(--primary); }
 
-        /* Chips */
         .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
         .chip-label { cursor: pointer; position: relative; }
         .chip-label input { position: absolute; opacity: 0; width: 0; height: 0; }
@@ -165,7 +155,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2); transform: scale(1.05);
         }
 
-        /* Buttons */
         .submit-btn {
             background: var(--primary);
             color: white; border: none; padding: 14px; width: 100%;
@@ -175,7 +164,6 @@
         }
         .submit-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
-        /* --- SUCCESS OVERLAY --- */
         .success-overlay {
             position: absolute; top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(255,255,255,0.95);
@@ -206,7 +194,6 @@
         @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 50px rgba(100,100,100,0.1); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- TABLE STYLES --- */
         .table-header-control {
             padding: 15px 25px; background: #fff;
             border-bottom: 1px solid #eee; display: flex; align-items: center;
@@ -403,35 +390,47 @@
                                 <input type="text" class="input-box" name="entry.1311389228" placeholder="e.g. Ford/F150/Red" required autocomplete="off">
                             </div>
                         </div>
+                        
                         <div class="q-group">
                             <label class="label">Ban Type <span style="color:red">*</span></label>
+                            <div class="desc-text urgent">For Security Ban List, Call Security Immediately</div>
                             <div class="chip-container">
                                 <label class="chip-label">
-                                    <input type="checkbox" name="entry.267845612" value="Temporary">
-                                    <span class="chip-text"><i class="fas fa-clock"></i> Temporary</span>
+                                    <input type="radio" name="entry.267845612" value="No Stopping on Driveway">
+                                    <span class="chip-text"><i class="fas fa-hand-paper"></i> No Stopping on Driveway</span>
                                 </label>
                                 <label class="chip-label">
-                                    <input type="checkbox" name="entry.267845612" value="Permanent">
-                                    <span class="chip-text"><i class="fas fa-gavel"></i> Permanent</span>
-                                </label>
-                                <label class="chip-label">
-                                    <input type="checkbox" name="entry.267845612" value="Warning">
-                                    <span class="chip-text"><i class="fas fa-exclamation-triangle"></i> Warning</span>
+                                    <input type="radio" name="entry.267845612" value="Security Ban List">
+                                    <span class="chip-text"><i class="fas fa-shield-alt"></i> Security Ban List</span>
                                 </label>
                             </div>
                         </div>
+
                         <div class="q-group">
-                            <label class="label">Reason of Ban</label>
+                            <label class="label">Details for the Ban</label>
+                            <div class="desc-text">Reason of the ban, include expiry date if it is a temporary ban.</div>
                             <div class="input-wrapper">
                                 <i class="fas fa-comment-slash"></i>
-                                <input type="text" class="input-box" name="entry.1086646485" placeholder="Reason (e.g. Verbal Abuse)" autocomplete="off">
+                                <input type="text" class="input-box" name="entry.1086646485" placeholder="Reason..." autocomplete="off">
                             </div>
                         </div>
+                        
                         <div class="q-group">
                             <label class="label">Approved By <span style="color:red">*</span></label>
-                            <div class="input-wrapper">
-                                <i class="fas fa-user-shield"></i>
-                                <input type="text" class="input-box" name="entry.1346596944" placeholder="Manager Initials" required autocomplete="off">
+                            <div class="desc-text">Choose Security if they are on the official ban list</div>
+                            <div class="chip-container">
+                                <label class="chip-label">
+                                    <input type="radio" name="entry.1346596944" value="Security">
+                                    <span class="chip-text"><i class="fas fa-shield-alt"></i> Security</span>
+                                </label>
+                                <label class="chip-label">
+                                    <input type="radio" name="entry.1346596944" value="Valet Supervisor">
+                                    <span class="chip-text"><i class="fas fa-user-tie"></i> Valet Supervisor</span>
+                                </label>
+                                <label class="chip-label">
+                                    <input type="radio" name="entry.1346596944" value="MOD">
+                                    <span class="chip-text"><i class="fas fa-building"></i> MOD</span>
+                                </label>
                             </div>
                         </div>
 
@@ -472,25 +471,19 @@
     <iframe name="hidden_iframe" style="display:none;"></iframe>
 
     <script>
-        // --- TAB LOGIC ---
         function switchTab(tabName) {
-            // 1. Hide all views
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            // 2. Remove active state from all buttons
             document.querySelectorAll('.tab-btn').forEach(el => {
                 el.classList.remove('active');
                 el.classList.remove('red-tab');
                 el.classList.remove('purple-tab');
             });
 
-            // 3. Show selected view
             document.getElementById('view-' + tabName).classList.add('active');
             
-            // 4. Update Button Style
             const clickedBtn = event.target;
             clickedBtn.classList.add('active');
             
-            // 5. Change Banner Border Color
             const hero = document.getElementById('hero');
             if(tabName === 'ban') {
                 hero.style.borderBottomColor = '#8b0000';
@@ -501,7 +494,6 @@
             }
         }
 
-        // --- SUBMISSION LOGIC (LOG) ---
         function validateAndSubmitLog(event) {
             const checkboxes = document.querySelectorAll('#googleFormLog input[name="entry.267845612"]');
             let isChecked = false;
@@ -516,16 +508,25 @@
             return true;
         }
 
-        // --- SUBMISSION LOGIC (BAN) ---
         function validateAndSubmitBan(event) {
-            // Reuse checkbox logic for Ban Type (Using same Entry ID as provided)
-            const checkboxes = document.querySelectorAll('#googleFormBan input[name="entry.267845612"]');
-            let isChecked = false;
-            checkboxes.forEach(box => { if (box.checked) isChecked = true; });
+            // Validate Ban Type (Radio)
+            const banTypes = document.querySelectorAll('#googleFormBan input[name="entry.267845612"]');
+            let typeChecked = false;
+            banTypes.forEach(r => { if (r.checked) typeChecked = true; });
 
-            if (!isChecked) {
+            // Validate Approved By (Radio)
+            const approvedBy = document.querySelectorAll('#googleFormBan input[name="entry.1346596944"]');
+            let appChecked = false;
+            approvedBy.forEach(r => { if (r.checked) appChecked = true; });
+
+            if (!typeChecked) {
                 event.preventDefault(); 
                 alert("Please select a Ban Type.");
+                return false;
+            }
+            if (!appChecked) {
+                event.preventDefault();
+                alert("Please select who approved this ban.");
                 return false;
             }
             startAnimation('Ban');
@@ -536,17 +537,13 @@
             const formBody = document.getElementById('formBody' + type);
             const overlay = document.getElementById('successOverlay' + type);
             
-            // Wait 1s for submission
             setTimeout(() => {
                 formBody.style.opacity = '0';
                 overlay.style.display = 'flex';
-                
-                // Wait 2s then reload
                 setTimeout(() => { location.reload(); }, 2000);
             }, 1000);
         }
 
-        // --- FETCH DATA ---
         const SHEET_URL_LOG = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT9a2j2_aw4q5RzfchbR_ApILPKP71K36aK8JAORCNJ8kHSR7fAsYdf11An5CitFe6kLELt40BQ_rKd/pub?output=csv";
         const SHEET_URL_BAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ5JIbfJx4dmv_jb5Od7nOT-GQ5ybOfdjJcEPWMXjK3jZb4FX4rjn4A6zj7Ej1kGEJM7pgKijwCHKLi/pub?output=csv";
 
@@ -554,7 +551,6 @@
         let allRowsBan = [];
 
         async function fetchData() {
-            // Load Log
             try {
                 const resLog = await fetch(SHEET_URL_LOG + "&t=" + Date.now());
                 const txtLog = await resLog.text();
@@ -564,7 +560,6 @@
                 document.getElementById('dataTableLog').style.display = 'table';
             } catch (err) { console.error(err); }
 
-            // Load Ban
             try {
                 const resBan = await fetch(SHEET_URL_BAN + "&t=" + Date.now());
                 const txtBan = await resBan.text();
@@ -600,7 +595,6 @@
             const tbody = document.getElementById('tableBody' + (type === 'log' ? 'Log' : 'Ban'));
             tbody.innerHTML = '';
             
-            // Define colors based on type
             const tagBg = type === 'log' ? '#f3e5f5' : '#ffebee';
             const tagColor = type === 'log' ? '#4b0082' : '#8b0000';
             const tagBorder = type === 'log' ? '#e1bee7' : '#ffcdd2';
@@ -610,16 +604,8 @@
                 const plate = cols[1] || '';
                 const vehicle = cols[2] || '';
                 const cats = cols[3] || '';
-                const field4 = cols[4] || '--'; // Log: Valet, Ban: Approved By (Assuming Col 4)
-                const field5 = cols[5] || '';   // Log: Note, Ban: Reason (Assuming Col 5)
-
-                // Swap logic for Log vs Ban based on typical sheet layout or previous request
-                // LOG: 4=Valet, 5=Note (We previously swapped these for LOG)
-                // BAN: 4=ApprovedBy, 5=Reason (Likely similar structure)
-                
-                // Let's assume standard order:
-                // LOG: TS, Plate, Vehicle, Cats, Valet, Note
-                // BAN: TS, Plate, Vehicle, Type, ApprovedBy, Reason
+                const field4 = cols[4] || '--'; 
+                const field5 = cols[5] || '';   
 
                 const catHTML = cats.split(',').map(c => 
                     c.trim() ? `<span style="background:${tagBg}; color:${tagColor}; padding:2px 8px; border-radius:10px; font-size:11px; margin-right:4px; border:1px solid ${tagBorder};">${c.trim()}</span>` : ''
@@ -628,7 +614,6 @@
                 const tr = document.createElement('tr');
                 
                 if (type === 'log') {
-                    // LOG MAPPING
                     tr.innerHTML = `
                         <td style="color:#555; font-size:12px; font-family:monospace;">${ts}</td>
                         <td style="font-weight:700; color:#333;">${plate}</td>
@@ -638,8 +623,6 @@
                         <td style="font-weight:bold; color:${tagColor};">${field4}</td>
                     `;
                 } else {
-                    // BAN MAPPING (Swapped 4/5 logic to match logic: field4 is Approved, field5 is Reason)
-                    // If sheet is TS, Plate, Veh, Type, Approved, Reason
                     tr.innerHTML = `
                         <td style="color:#555; font-size:12px; font-family:monospace;">${ts}</td>
                         <td style="font-weight:700; color:#333;">${plate}</td>
@@ -680,9 +663,7 @@
 
             rows.forEach(row => tbody.appendChild(row));
             
-            // Reset header colors
             table.querySelectorAll("thead th").forEach(th => th.style.color = "");
-            // Set active color based on type
             const activeColor = type === 'log' ? '#4b0082' : '#8b0000';
             table.querySelectorAll("thead th")[columnIndex].style.color = activeColor;
         }
