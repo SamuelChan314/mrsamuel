@@ -574,7 +574,7 @@
             }).filter(r => r.length > 1);
         }
 
-        function formatDate(rawDate) {
+        function formatDate(rawDate, includeTime) {
             const parts = rawDate.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})\s(\d{1,2}):(\d{2})/);
             if (parts) {
                 const dd = parts[1].padStart(2, '0');
@@ -582,7 +582,12 @@
                 const yyyy = parts[3];
                 const hh = parts[4].padStart(2, '0');
                 const min = parts[5];
-                return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+                
+                if (includeTime) {
+                    return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+                } else {
+                    return `${yyyy}-${mm}-${dd}`;
+                }
             }
             return rawDate; 
         }
@@ -596,7 +601,7 @@
             const tagBorder = type === 'log' ? '#e1bee7' : '#ffcdd2';
 
             data.forEach(cols => {
-                const ts = formatDate(cols[0] || '');
+                const ts = formatDate(cols[0] || '', type === 'log');
                 const plate = cols[1] || '';
                 const vehicle = cols[2] || '';
                 const cats = cols[3] || '';
@@ -624,8 +629,8 @@
                         <td style="font-weight:700; color:#333;">${plate}</td>
                         <td>${vehicle}</td>
                         <td>${catHTML}</td>
-                        <td style="color:#666; white-space:normal; min-width:200px;">${field5}</td>
-                        <td style="font-weight:bold; color:${tagColor};">${field4}</td>
+                        <td style="color:#666; white-space:normal; min-width:200px;">${field4}</td>
+                        <td style="font-weight:bold; color:${tagColor};">${field5}</td>
                     `;
                 }
                 tbody.appendChild(tr);
