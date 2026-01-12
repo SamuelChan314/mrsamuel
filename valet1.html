@@ -223,14 +223,13 @@
             transition: background 0.2s;
         }
         thead th:hover { background: #e0e0e0; color: var(--primary); }
-        /* Sort arrow indicator */
         thead th::after { content: '\2195'; opacity: 0.3; margin-left: 6px; font-weight: normal; font-size: 11px; }
 
         tbody td {
             padding: 12px 18px;
             border-bottom: 1px solid #eee;
             color: var(--text-main);
-            vertical-align: middle;
+            vertical-align: top; 
             white-space: nowrap; 
         }
         tbody tr:hover { background-color: #f9f0ff; }
@@ -422,12 +421,15 @@
             tbody.innerHTML = '';
             
             data.forEach(cols => {
+                // FIXED MAPPING: Swapped Col 4 (Valet) and Col 5 (Note)
                 const ts = formatDate(cols[0] || '');
                 const plate = cols[1] || '';
                 const vehicle = cols[2] || '';
                 const cats = cols[3] || '';
-                const note = cols[4] || '';
-                const valet = cols[5] || '--';
+                
+                // HERE IS THE FIX:
+                const valet = cols[4] || '--'; // User said Valet is appearing here
+                const note = cols[5] || '';    // User said Note is appearing here
 
                 const catHTML = cats.split(',').map(c => 
                     c.trim() ? `<span style="background:#f3e5f5; color:#4b0082; padding:2px 8px; border-radius:10px; font-size:11px; margin-right:4px; border:1px solid #e1bee7;">${c.trim()}</span>` : ''
@@ -439,7 +441,7 @@
                     <td style="font-weight:700; color:#333;">${plate}</td>
                     <td>${vehicle}</td>
                     <td>${catHTML}</td>
-                    <td style="color:#666; font-style:italic;">${note}</td>
+                    <td style="color:#666; font-style:italic; white-space:normal; min-width:200px;">${note}</td>
                     <td style="font-weight:bold; color:#4b0082;">${valet}</td>
                 `;
                 tbody.appendChild(tr);
@@ -453,20 +455,17 @@
             renderTable(filtered);
         }
 
-        // --- 4. NEW & IMPROVED SORTING (FIXED) ---
+        // --- 4. Sorting ---
         function sortTable(columnIndex) {
             const table = document.getElementById("dataTable");
             const tbody = document.getElementById("tableBody");
             
-            // Get current sort direction
             const currentDir = table.getAttribute("data-sort-dir");
             const newDir = currentDir === "asc" ? "desc" : "asc";
             table.setAttribute("data-sort-dir", newDir);
 
-            // Convert HTMLCollection to Array
             const rows = Array.from(tbody.rows);
 
-            // Sort logic
             rows.sort((a, b) => {
                 const aText = a.cells[columnIndex].innerText.toLowerCase();
                 const bText = b.cells[columnIndex].innerText.toLowerCase();
@@ -478,10 +477,8 @@
                 }
             });
 
-            // Re-append sorted rows (no blinking!)
             rows.forEach(row => tbody.appendChild(row));
 
-            // Visual Updates (Highlight active column)
             document.querySelectorAll("thead th").forEach(th => th.style.color = "");
             document.querySelectorAll("thead th")[columnIndex].style.color = "var(--primary)";
         }
