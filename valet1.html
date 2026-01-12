@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Inquiry Form</title>
+    <style>
+        :root {
+            --primary-color: #673ab7; /* Deep Purple similar to Forms */
+            --primary-light: #ede7f6;
+            --text-color: #202124;
+            --border-color: #dadce0;
+            --error-color: #d93025;
+            --bg-color: #f0ebf8;
+            --card-bg: #ffffff;
+            --focus-blue: #4285f4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Container */
+        .form-container {
+            width: 100%;
+            max-width: 640px;
+            margin-top: 12px;
+        }
+
+        /* Top Header Stripe */
+        .form-header-stripe {
+            height: 10px;
+            background-color: var(--primary-color);
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            width: 100%;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 12px;
+            position: relative;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card.active {
+            border-left: 6px solid var(--focus-blue);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+
+        .title-card {
+            border-top: none;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 400;
+            color: var(--text-color);
+            margin-bottom: 12px;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #5f6368;
+            line-height: 1.5;
+        }
+
+        .required-note {
+            color: var(--error-color);
+            font-size: 12px;
+            margin-top: 10px;
+            display: block;
+        }
+
+        /* Input Groups */
+        .input-group {
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .question-label {
+            font-size: 16px;
+            color: var(--text-color);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .required-star {
+            color: var(--error-color);
+        }
+
+        /* Text Inputs */
+        .text-input {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px 0;
+            font-size: 14px;
+            outline: none;
+            background: transparent;
+            transition: border-bottom 0.3s;
+        }
+
+        .text-input:focus {
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .text-input::placeholder {
+            color: #70757a;
+        }
+
+        /* Radio & Checkboxes */
+        .option-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .option-group input {
+            margin-right: 12px;
+            accent-color: var(--primary-color);
+            width: 18px;
+            height: 18px;
+        }
+
+        .option-group label {
+            font-size: 14px;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        button.submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button.submit-btn:hover {
+            background-color: #552d9e;
+            box-shadow: 0 1px 2px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+        }
+
+        button.clear-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button.clear-btn:hover {
+            background-color: var(--primary-light);
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
+
+        /* Validation */
+        .error-message {
+            display: none;
+            color: var(--error-color);
+            font-size: 12px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .error-message i {
+            margin-right: 5px;
+        }
+
+        .input-error {
+            border-bottom-color: var(--error-color) !important;
+        }
+
+        /* Progress Bar (hidden by default) */
+        .progress-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255,255,255,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <form class="form-container" id="mainForm">
+        <div class="form-header-stripe"></div>
+        <div class="card title-card">
+            <h1>Contact & Inquiry Form</h1>
+            <p class="description">Please fill out this form to request services or get in touch with our team. We will respond within 24 hours.</p>
+            <span class="required-note">* Indicates required question</span>
+        </div>
+
+        <div class="card input-card" onclick="focusCard(this)">
+            <label class="question-label">Full Name <span class="required-star">*</span></label>
+            <div class="input-group">
+                <input type="text" class="text-input" id="name" placeholder="Your answer" required>
+            </div>
+            <div class="error-message" id="nameError">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#d93025"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                &nbsp; This is a required question
+            </div>
+        </div>
+
+        <div class="card input-card" onclick="focusCard(this)">
+            <label class="question-label">Email Address <span class="required-star">*</span></label>
+            <div class="input-group">
+                <input type="email" class="text-input" id="email" placeholder="Your email" required>
+            </div>
+            <div class="error-message" id="emailError">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#d93025"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                &nbsp; Please enter a valid email
+            </div>
+        </div>
+
+        <div class="card input-card" onclick="focusCard(this)">
+            <label class="question-label">Service Type</label>
+            
+            <div class="option-group">
+                <input type="radio" name="service" id="web" value="Web Development">
+                <label for="web">Web Development</label>
+            </div>
+            <div class="option-group">
+                <input type="radio" name="service" id="design" value="UI/UX Design">
+                <label for="design">UI/UX Design</label>
+            </div>
+            <div class="option-group">
+                <input type="radio" name="service" id="marketing" value="Marketing">
+                <label for="marketing">Digital Marketing</label>
+            </div>
+            <div class="option-group">
+                <input type="radio" name="service" id="other" value="Other">
+                <label for="other">Other</label>
+            </div>
+        </div>
+
+        <div class="card input-card" onclick="focusCard(this)">
+            <label class="question-label">Project Details <span class="required-star">*</span></label>
+            <div class="input-group">
+                <input type="text" class="text-input" id="details" placeholder="Your answer" required>
+            </div>
+            <div class="error-message" id="detailsError">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#d93025"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                &nbsp; This is a required question
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button type="submit" class="submit-btn">Submit</button>
+            <button type="button" class="clear-btn" onclick="clearForm()">Clear form</button>
+        </div>
+
+    </form>
+
+    <div class="progress-overlay" id="spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+        // UI Interaction: Card Focus Effect
+        function focusCard(card) {
+            // Remove active class from all cards
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            // Add active class to clicked card
+            card.classList.add('active');
+        }
+
+        // Form Submission Logic
+        const form = document.getElementById('mainForm');
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Stop actual submission
+
+            let isValid = true;
+
+            // Validate Name
+            const nameInput = document.getElementById('name');
+            const nameError = document.getElementById('nameError');
+            if(nameInput.value.trim() === "") {
+                nameError.style.display = 'flex';
+                nameInput.classList.add('input-error');
+                isValid = false;
+            } else {
+                nameError.style.display = 'none';
+                nameInput.classList.remove('input-error');
+            }
+
+            // Validate Email
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(!emailRegex.test(emailInput.value)) {
+                emailError.style.display = 'flex';
+                emailInput.classList.add('input-error');
+                isValid = false;
+            } else {
+                emailError.style.display = 'none';
+                emailInput.classList.remove('input-error');
+            }
+
+            // Validate Details
+            const detailsInput = document.getElementById('details');
+            const detailsError = document.getElementById('detailsError');
+            if(detailsInput.value.trim() === "") {
+                detailsError.style.display = 'flex';
+                detailsInput.classList.add('input-error');
+                isValid = false;
+            } else {
+                detailsError.style.display = 'none';
+                detailsInput.classList.remove('input-error');
+            }
+
+            if(isValid) {
+                // Simulate Submission
+                document.getElementById('spinner').style.display = 'flex';
+                setTimeout(() => {
+                    document.getElementById('spinner').style.display = 'none';
+                    alert("Form submitted successfully!");
+                    clearForm();
+                }, 1500);
+            }
+        });
+
+        // Clear Form Logic
+        function clearForm() {
+            form.reset();
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.text-input').forEach(el => el.classList.remove('input-error'));
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            window.scrollTo(0,0);
+        }
+
+        // Real-time validation removal on input
+        document.querySelectorAll('.text-input').forEach(input => {
+            input.addEventListener('input', function() {
+                if(this.value.trim() !== "") {
+                    this.classList.remove('input-error');
+                    // Find the sibling error message within the same card
+                    let parentCard = this.closest('.card');
+                    if(parentCard.querySelector('.error-message')) {
+                        parentCard.querySelector('.error-message').style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
