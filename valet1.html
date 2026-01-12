@@ -3,389 +3,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Inquiry Interface</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Inquiry Form</title>
     <style>
+        /* 1. Base Setup & Font (Microsoft Style) */
         :root {
-            --primary: #4f46e5; /* Indigo */
-            --primary-hover: #4338ca;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --input-bg: #f9fafb;
-            --error: #ef4444;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            --primary: #03787c; /* MS Forms Teal */
+            --primary-dark: #025c5f;
+            --bg-image: url('https://i.imgur.com/St8RLPM.jpeg');
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --text-main: #252423;
+            --text-secondary: #605e5c;
+            --error: #a80000;
         }
 
         body {
-            background: var(--bg-gradient);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        /* Main Container */
-        .container {
-            background: #ffffff;
-            width: 100%;
-            max-width: 1000px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            display: flex;
-            overflow: hidden;
-            min-height: 600px;
-        }
-
-        /* Left Side - Visuals */
-        .visual-side {
-            flex: 1;
-            background: linear-gradient(rgba(79, 70, 229, 0.85), rgba(67, 56, 202, 0.9)), 
-                        url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', 'Segoe WP', Tahoma, Arial, sans-serif;
+            background-image: var(--bg-image);
             background-size: cover;
             background-position: center;
-            padding: 40px;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Centers vertically */
+        }
+
+        /* 2. The Main Container */
+        .form-container {
+            width: 100%;
+            max-width: 640px;
+            background-color: var(--glass-bg);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+            margin: 20px;
+            border-radius: 8px; /* Slightly softer corners */
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            color: white;
-            position: relative;
+            backdrop-filter: blur(8px); /* The "Frosted Glass" effect */
+            -webkit-backdrop-filter: blur(8px);
         }
 
-        .visual-content h2 {
-            font-size: 36px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            line-height: 1.2;
-        }
-
-        .visual-content p {
-            font-size: 16px;
-            opacity: 0.9;
-            line-height: 1.6;
-        }
-
-        /* Right Side - Form */
-        .form-side {
-            flex: 1.2;
-            padding: 50px;
-            position: relative;
-        }
-
+        /* 3. Header Section */
         .form-header {
-            margin-bottom: 40px;
+            padding: 32px 32px 20px 32px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            background: white;
         }
 
-        .form-header h3 {
-            color: var(--text-dark);
+        .form-header h1 {
             font-size: 28px;
             font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            margin-top: 0;
         }
 
         .form-header p {
-            color: var(--text-light);
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        /* Floating Label Inputs */
-        .input-group {
-            position: relative;
-            margin-bottom: 25px;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 15px 15px 15px 15px;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
             font-size: 15px;
-            color: var(--text-dark);
-            background: var(--input-bg);
-            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* 4. Form Body */
+        .form-body {
+            padding: 10px 32px 32px 32px;
+        }
+
+        /* 5. Question Cards */
+        .question-group {
+            background: transparent;
+            margin-bottom: 24px;
+            margin-top: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .question-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .required-star {
+            color: var(--error);
+            margin-left: 4px;
+        }
+
+        /* 6. Inputs (Modern & Clean) */
+        .input-control {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text-main);
+            border: 1px solid #8a8886; /* Neutral border */
+            border-radius: 4px;
+            background: rgba(255,255,255,0.8);
+            transition: all 0.2s;
             outline: none;
         }
 
-        /* Label Styling */
-        .input-label {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: transparent;
-            color: var(--text-light);
-            font-size: 15px;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            padding: 0 5px;
+        .input-control:hover {
+            border-color: #323130;
         }
 
-        /* Animation State: Focus or Has Content */
-        .input-field:focus,
-        .input-field:not(:placeholder-shown) {
+        .input-control:focus {
             border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            border-bottom-width: 2px;
+            background: #ffffff;
+            box-shadow: inset 0 -1px 0 0 var(--primary); /* Bottom highlight */
         }
 
-        .input-field:focus ~ .input-label,
-        .input-field:not(:placeholder-shown) ~ .input-label {
-            top: 0;
-            transform: translateY(-50%) scale(0.9);
-            color: var(--primary);
-            background: #fff;
-            font-weight: 500;
+        textarea.input-control {
+            resize: vertical;
+            min-height: 100px;
         }
 
-        /* Select Styling */
-        select.input-field {
-            cursor: pointer;
-            appearance: none;
-        }
-        
-        /* Submit Button */
+        /* 7. Button */
         .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary);
+            background-color: var(--primary);
             color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
-            transition: transform 0.2s ease, background 0.2s ease;
-            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background-color 0.2s;
+            margin-top: 10px;
         }
 
         .submit-btn:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
+            background-color: var(--primary-dark);
         }
 
-        .submit-btn:active {
-            transform: translateY(0);
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
 
-        /* Error States */
-        .input-group.error .input-field {
-            border-color: var(--error);
-        }
-        
-        .input-group.error .input-label {
-            color: var(--error);
-        }
-
+        /* 8. Validation Feedback */
         .error-msg {
             display: none;
             color: var(--error);
             font-size: 12px;
-            margin-top: 5px;
-            margin-left: 5px;
-        }
-
-        .input-group.error .error-msg {
-            display: block;
-        }
-
-        /* Success Overlay */
-        .success-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            margin-top: 6px;
             align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
+        }
+        
+        .input-control.error {
+            border-color: var(--error);
         }
 
-        .success-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
+        /* 9. Success Overlay */
+        .success-view {
+            display: none;
+            text-align: center;
+            padding: 60px 40px;
+        }
+        .success-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 16px;
         }
 
-        .check-icon {
-            width: 80px;
-            height: 80px;
-            background: #d1fae5;
-            color: #10b981;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            margin-bottom: 20px;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                max-width: 400px;
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .form-container {
+                margin: 0;
+                height: 100vh;
+                border-radius: 0;
+                max-width: 100%;
             }
-            .visual-side {
-                display: none; /* Hide image on mobile for cleaner look */
-            }
-            .form-side {
-                padding: 30px;
+            .form-header, .form-body {
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="visual-side">
-            <div class="visual-content">
-                <h2>Let's build something<br>amazing together.</h2>
-                <p>Fill out the form and our team will get back to you within 24 hours.</p>
-            </div>
-        </div>
-
-        <div class="form-side">
-            <div class="success-overlay" id="successMessage">
-                <div class="check-icon">✓</div>
-                <h3>Message Sent!</h3>
-                <p style="color: #6b7280; margin-top: 10px;">We'll be in touch shortly.</p>
-                <button class="submit-btn" onclick="resetForm()" style="margin-top: 20px; width: auto; padding: 10px 30px;">Send Another</button>
+    <div class="form-container">
+        
+        <div id="formView">
+            <div class="form-header">
+                <h1>Contact Us</h1>
+                <p>Please fill out the details below. We usually respond to all inquiries within one business day.</p>
             </div>
 
-            <form id="proForm">
-                <div class="form-header">
-                    <h3>Get in touch</h3>
-                    <p>We'd love to hear about your project.</p>
+            <form class="form-body" id="msForm">
+                
+                <div class="question-group">
+                    <label class="question-label">Full Name <span class="required-star">*</span></label>
+                    <input type="text" class="input-control" id="name" placeholder="Enter your answer">
+                    <div class="error-msg">This question is required.</div>
                 </div>
 
-                <div class="input-group">
-                    <input type="text" class="input-field" id="name" placeholder=" " autocomplete="off">
-                    <label class="input-label" for="name">Full Name</label>
-                    <span class="error-msg">Please enter your name</span>
+                <div class="question-group">
+                    <label class="question-label">Email Address <span class="required-star">*</span></label>
+                    <input type="email" class="input-control" id="email" placeholder="Enter your answer">
+                    <div class="error-msg">Please enter a valid email address.</div>
                 </div>
 
-                <div class="input-group">
-                    <input type="email" class="input-field" id="email" placeholder=" " autocomplete="off">
-                    <label class="input-label" for="email">Email Address</label>
-                    <span class="error-msg">Please enter a valid email</span>
-                </div>
-
-                <div class="input-group">
-                    <select class="input-field" id="service" style="background-color: transparent;">
-                        <option value="" disabled selected hidden></option> <option value="web">Web Development</option>
-                        <option value="design">Product Design</option>
-                        <option value="marketing">SEO & Marketing</option>
+                <div class="question-group">
+                    <label class="question-label">Topic</label>
+                    <select class="input-control" id="topic">
+                        <option value="" disabled selected>Select your option</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="support">Technical Support</option>
+                        <option value="sales">Sales & Billing</option>
                     </select>
-                    <label class="input-label" for="service">Interested Service</label>
-                    <span class="error-msg">Please select a service</span>
                 </div>
 
-                <div class="input-group">
-                    <textarea class="input-field" id="message" rows="4" placeholder=" " style="resize: none; height: auto;"></textarea>
-                    <label class="input-label" for="message">Project Details</label>
-                    <span class="error-msg">Please describe your project</span>
+                <div class="question-group">
+                    <label class="question-label">Message <span class="required-star">*</span></label>
+                    <textarea class="input-control" id="message" placeholder="Enter your answer"></textarea>
+                    <div class="error-msg">This question is required.</div>
                 </div>
 
-                <button type="submit" class="submit-btn">Send Message</button>
+                <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
+
             </form>
         </div>
+
+        <div class="success-view" id="successView">
+            <div class="success-icon">✓</div>
+            <h2 style="color: var(--primary); margin-top:0;">Thanks!</h2>
+            <p>Your response was submitted.</p>
+            <button class="submit-btn" style="background:transparent; color:#666; border:1px solid #ccc; box-shadow:none;" onclick="location.reload()">Submit another response</button>
+        </div>
+
     </div>
 
     <script>
-        const form = document.getElementById('proForm');
-        
-        form.addEventListener('submit', function(e) {
+        document.getElementById('msForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
             let isValid = true;
-
-            // 1. Validate Name
-            const name = document.getElementById('name');
-            if (name.value.trim() === '') {
-                setError(name);
-                isValid = false;
-            } else {
-                clearError(name);
+            
+            // Validation Helper
+            function validateField(id, condition) {
+                const el = document.getElementById(id);
+                const parent = el.parentElement;
+                const error = parent.querySelector('.error-msg');
+                
+                if(!condition) {
+                    el.classList.add('error');
+                    error.style.display = 'flex';
+                    return false;
+                } else {
+                    el.classList.remove('error');
+                    error.style.display = 'none';
+                    return true;
+                }
             }
 
-            // 2. Validate Email
-            const email = document.getElementById('email');
+            // 1. Name Check
+            const nameValid = validateField('name', document.getElementById('name').value.trim() !== "");
+            
+            // 2. Email Check
+            const emailVal = document.getElementById('email').value;
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email.value)) {
-                setError(email);
-                isValid = false;
-            } else {
-                clearError(email);
-            }
+            const emailValid = validateField('email', emailRegex.test(emailVal));
 
-            // 3. Validate Service
-            const service = document.getElementById('service');
-            if (service.value === '') {
-                setError(service);
-                isValid = false;
-            } else {
-                clearError(service);
-            }
+            // 3. Message Check
+            const msgValid = validateField('message', document.getElementById('message').value.trim() !== "");
 
-            // 4. Validate Message
-            const message = document.getElementById('message');
-            if (message.value.trim() === '') {
-                setError(message);
-                isValid = false;
-            } else {
-                clearError(message);
-            }
-
-            // If Valid, Simulate Submission
-            if (isValid) {
-                const btn = document.querySelector('.submit-btn');
+            if(nameValid && emailValid && msgValid) {
+                const btn = document.getElementById('submitBtn');
                 const originalText = btn.innerText;
                 
-                // Loading State
-                btn.innerText = "Sending...";
-                btn.style.opacity = "0.7";
+                btn.innerText = "Submitting...";
+                btn.disabled = true;
 
+                // Simulate Network Request
                 setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.opacity = "1";
-                    document.getElementById('successMessage').classList.add('active');
-                }, 1500);
+                    document.getElementById('formView').style.display = 'none';
+                    document.getElementById('successView').style.display = 'block';
+                }, 1000);
             }
         });
 
-        // Helper: Set Error Class
-        function setError(input) {
-            input.parentElement.classList.add('error');
-        }
-
-        // Helper: Clear Error Class
-        function clearError(input) {
-            input.parentElement.classList.remove('error');
-        }
-
-        // Helper: Reset Form for new submission
-        function resetForm() {
-            document.getElementById('successMessage').classList.remove('active');
-            form.reset();
-            // Remove all error classes
-            document.querySelectorAll('.input-group').forEach(group => group.classList.remove('error'));
-        }
-
-        // Real-time error removal
-        document.querySelectorAll('.input-field').forEach(item => {
-            item.addEventListener('input', () => {
-                clearError(item);
+        // Clear errors on input
+        document.querySelectorAll('.input-control').forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('error');
+                this.parentElement.querySelector('.error-msg').style.display = 'none';
             });
         });
     </script>
-
 </body>
 </html>
