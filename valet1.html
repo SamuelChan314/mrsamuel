@@ -32,12 +32,13 @@
             overflow: hidden; 
         }
 
-        /* --- 1. Hero Section --- */
+        /* --- 1. Hero Section (UPDATED HEIGHT) --- */
         .hero-banner {
             background-image: linear-gradient(rgba(30, 30, 30, 0.85), rgba(30, 30, 30, 0.85)), var(--bg-image);
             background-size: cover;
             background-position: center;
-            padding: 20px 40px;
+            /* Increased padding from 20px to 50px */
+            padding: 50px 40px;
             color: white;
             text-align: center;
             flex-shrink: 0;
@@ -47,8 +48,8 @@
             z-index: 10;
         }
 
-        .hero-banner h1 { margin: 0; font-size: 28px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .hero-banner p { margin: 6px 0 0 0; opacity: 0.8; font-size: 14px; font-weight: 400; }
+        .hero-banner h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .hero-banner p { margin: 8px 0 0 0; opacity: 0.9; font-size: 15px; font-weight: 400; }
 
         /* --- 2. Main Layout (50/50) --- */
         .main-content {
@@ -326,7 +327,7 @@
             </div>
 
             <div class="form-body" id="formBody">
-                <form id="googleForm" target="hidden_iframe" onsubmit="handleSub()" 
+                <form id="googleForm" target="hidden_iframe" onsubmit="return validateAndSubmit(event)" 
                       action="https://docs.google.com/forms/d/e/1FAIpQLScmnH3czFTZ34dGjE23YuYMMLyTO_JdjA_fjNxMBjz68-ClGg/formResponse" method="POST">
                     
                     <div class="q-group">
@@ -346,7 +347,7 @@
                     </div>
 
                     <div class="q-group">
-                        <label class="label">Category</label>
+                        <label class="label">Category <span style="color:red">*</span></label>
                         <div class="chip-container">
                             <label class="chip-label">
                                 <input type="checkbox" name="entry.267845612" value="Legends">
@@ -423,16 +424,39 @@
     </div>
 
     <script>
-        // --- 1. Submission Logic ---
-        function handleSub() {
+        // --- 1. Validation & Submission Logic ---
+        function validateAndSubmit(event) {
+            // 1. Get all checkboxes with the Category entry ID
+            const checkboxes = document.querySelectorAll('input[name="entry.267845612"]');
+            let isChecked = false;
+
+            // 2. Check if at least one is selected
+            checkboxes.forEach(box => {
+                if (box.checked) isChecked = true;
+            });
+
+            // 3. If invalid, STOP everything
+            if (!isChecked) {
+                event.preventDefault(); // Stop form submission
+                alert("Please select at least one Category.");
+                return false;
+            }
+
+            // 4. If valid, proceed with animation & submission
+            // We do NOT preventDefault here so the form actually submits to the hidden iframe
+            startAnimation();
+            return true;
+        }
+
+        function startAnimation() {
             const btn = document.querySelector('.submit-btn');
             
-            // 1. Show Loading State on Button
+            // Show Loading State on Button
             btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> &nbsp;Saving...';
             btn.style.opacity = "0.8";
             btn.disabled = true;
             
-            // 2. Wait 1s for the request to go out, then trigger Animation
+            // Wait 1s for the data to send
             setTimeout(() => {
                 // Fade out form
                 document.getElementById('formBody').style.opacity = '0';
@@ -441,7 +465,7 @@
                 const overlay = document.getElementById('successOverlay');
                 overlay.style.display = 'flex';
                 
-                // 3. Wait 2 seconds for animation, then REFRESH PAGE
+                // Wait 2 seconds for animation, then REFRESH PAGE
                 setTimeout(() => {
                     location.reload(); 
                 }, 2000);
