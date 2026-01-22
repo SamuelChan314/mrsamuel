@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JWYEG Valet Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --secondary: #333333; 
+            --bg-gradient: linear-gradient(135deg, #e0e0e0 0%, #f3f3f3 100%);
+            --input-bg: #f8f9fa;
+            --text-main: #252423;
+            --text-light: #605e5c;
+            --bg-image: url('https://i.imgur.com/St8RLPM.jpeg');
+
+            --primary: #4b0082; 
+            --primary-hover: #3a0063;
+            --accent-light: #f3e5f5;
+        }
+
+        /* BAN LIST THEME (RED) */
+        .theme-red {
+            --primary: #8b0000; 
+            --primary-hover: #600000;
+            --accent-light: #ffebee;
+        }
+
+        /* STORAGE THEME (NAVY BLUE) */
+        .theme-blue {
+            --primary: #283593;
+            --primary-hover: #1a237e;
+            --accent-light: #e8eaf6;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            display: flex; flex-direction: column;
+            overflow: hidden; 
+        }
+
+        /* --- HERO BANNER --- */
+        .hero-banner {
+            background-image: linear-gradient(rgba(30, 30, 30, 0.85), rgba(30, 30, 30, 0.85)), var(--bg-image);
+            background-size: cover; background-position: center;
+            padding: 30px 40px 0 40px; 
+            color: white; text-align: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-bottom: 4px solid var(--primary);
+            position: relative; z-index: 10;
+            transition: border-color 0.3s;
+        }
+
+        .hero-banner h1 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .hero-banner p { margin: 8px 0 20px 0; opacity: 0.9; font-size: 15px; font-weight: 400; }
+
+        /* --- TABS --- */
+        .tabs-container {
+            display: flex; justify-content: center; gap: 10px;
+        }
+        .tab-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: rgba(255,255,255,0.7);
+            padding: 12px 25px;
+            font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.2s;
+            position: relative;
+            top: 4px; 
+        }
+        .tab-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+        .tab-btn.active {
+            background: white;
+            color: var(--secondary);
+            font-weight: 700;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+        }
+        .tab-btn.active.red-tab { color: #8b0000; }
+        .tab-btn.active.purple-tab { color: #4b0082; }
+        .tab-btn.active.blue-tab { color: #283593; }
+
+        /* --- LAYOUT --- */
+        .main-content {
+            display: flex; flex: 1; 
+            padding: 25px; gap: 30px;
+            overflow: hidden;
+            background: #dcdcdc;
+        }
+        
+        .view-section {
+            display: none; 
+            flex: 1;
+            gap: 30px;
+            height: 100%;
+            width: 100%;
+        }
+        .view-section.active { display: flex; }
+
+        .panel {
+            flex: 1; 
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.6);
+            position: relative;
+        }
+
+        /* --- FORM --- */
+        .form-container { overflow-y: auto; }
+        .form-header {
+            padding: 20px 30px; background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky; top: 0; z-index: 20;
+        }
+        .form-header h2 { margin: 0; color: var(--secondary); font-size: 22px; display: flex; align-items: center; gap: 10px; }
+        .form-header h2 i { color: var(--primary); }
+        .form-body { padding: 25px 35px; transition: opacity 0.3s ease; }
+        .q-group { margin-bottom: 24px; position: relative; }
+        
+        .label { 
+            display: block; font-weight: 700; font-size: 13px; 
+            margin-bottom: 8px; color: var(--secondary);
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .desc-text { font-size: 12px; color: #777; margin-top: -6px; margin-bottom: 8px; font-style: italic; }
+        .desc-text.urgent { color: #d32f2f; font-weight: 600; }
+
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        .input-wrapper i { 
+            position: absolute; 
+            left: 14px; 
+            color: #888; 
+            font-size: 14px; 
+            transition: color 0.2s;
+            top: 14px; 
+        }
+        .input-box {
+            width: 100%; padding: 12px 15px 12px 40px; 
+            border: 1px solid #ccc; border-radius: 8px;
+            font-family: inherit; font-size: 14px;
+            background-color: var(--input-bg);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        textarea.input-box {
+            resize: vertical; 
+            min-height: 80px; 
+            line-height: 1.5;
+        }
+
+        .input-box:focus { 
+            background-color: #fff; border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(100,100,100, 0.15); 
+            color: var(--text-main); outline: none;
+        }
+        .input-box:focus + i { color: var(--primary); }
+
+        /* --- CHIPS & BUTTONS --- */
+        .chip-container { display: flex; flex-wrap: wrap; gap: 8px; }
+        .chip-label { cursor: pointer; position: relative; }
+        .chip-label input { position: absolute; opacity: 0; width: 0; height: 0; }
+        .chip-text {
+            display: flex; align-items: center; gap: 6px;
+            padding: 8px 14px; background-color: #eee;
+            border-radius: 20px; font-size: 13px; color: #555;
+            font-weight: 600; transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .chip-label:hover .chip-text { background-color: #e0e0e0; transform: translateY(-1px); }
+        .chip-label input:checked ~ .chip-text {
+            background-color: var(--primary); color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); transform: scale(1.05);
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white; border: none; padding: 14px; width: 100%;
+            border-radius: 8px; font-weight: 600; cursor: pointer; 
+            margin-top: 15px; font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.2s;
+        }
+        .submit-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        /* --- SUCCESS OVERLAY --- */
+        .success-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.95);
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 50;
+        }
+        .checkmark {
+            width: 80px; height: 80px; border-radius: 50%;
+            display: block; stroke-width: 4; stroke: var(--primary);
+            stroke-miterlimit: 10; box-shadow: inset 0px 0px 0px var(--primary);
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+        .checkmark__circle {
+            stroke-dasharray: 166; stroke-dashoffset: 166; stroke-width: 4;
+            stroke-miterlimit: 10; stroke: var(--primary); fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        .checkmark__check {
+            transform-origin: 50% 50%; stroke-dasharray: 48; stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+        .success-text {
+            margin-top: 20px; font-size: 20px; color: var(--primary);
+            font-weight: 600; opacity: 0; animation: fadeIn 0.5s ease-out 1s forwards;
+        }
+        @keyframes stroke { 100% { stroke-dashoffset: 0; } }
+        @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+        @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 50px rgba(100,100,100,0.1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- TABLE --- */
+        .table-header-control {
+            padding: 15px 25px; background: #fff;
+            border-bottom: 1px solid #eee; display: flex; align-items: center;
+        }
+        .search-bar {
+            width: 100%; padding: 10px 15px 10px 40px;
+            border-radius: 20px; border: 1px solid #ccc;
+            background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") no-repeat 12px center;
+            font-size: 14px; transition: all 0.2s;
+        }
+        .search-bar:focus { border-color: var(--primary); outline: none; }
+
+        .table-wrap { flex: 1; overflow: auto; }
+        
+        table { width: 100%; min-width: 900px; border-collapse: collapse; font-size: 13px; }
+        
+        thead th {
+            position: sticky; top: 0; background: #f1f1f1;
+            color: var(--secondary); font-weight: 700; text-align: left;
+            padding: 14px 18px; border-bottom: 2px solid #ccc;
+            white-space: nowrap; cursor: pointer; user-select: none; z-index: 5;
+            transition: background 0.2s;
+        }
+        thead th:hover { background: #e0e0e0; color: var(--primary); }
+        thead th::after { content: '\2195'; opacity: 0.3; margin-left: 6px; font-weight: normal; font-size: 11px; }
+
+        tbody td {
+            padding: 12px 18px; border-bottom: 1px solid #eee;
+            color: var(--text-main); vertical-align: top; white-space: nowrap; 
+        }
+        tbody tr:hover { background-color: #f9f0ff; }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #aaa; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #888; }
+
+        /* --- MOBILE OPTIMIZATION --- */
+        @media (max-width: 900px) {
+            body { 
+                height: auto; 
+                overflow-y: auto; 
+                -webkit-overflow-scrolling: touch;
+            }
+            .main-content {
+                flex-direction: column; 
+                padding: 15px; 
+                gap: 20px; 
+                height: auto;
+            }
+            .view-section { flex-direction: column; }
+            .panel { min-height: auto; flex: none; width: 100%; }
+            .form-container { max-height: none; }
+            .table-wrap { max-height: 500px; border-top: 1px solid #eee; }
+            .hero-banner { padding: 25px 20px 0 20px; }
+            .hero-banner h1 { font-size: 26px; }
+            .tab-btn { padding: 10px 15px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-banner" id="hero">
+        <h1>JWYEG Valet Portal</h1>
+        <p>Log and view all drivers who ignored our policies or instructions.</p>
+        
+        <div class="tabs-container">
+            <button class="tab-btn active purple-tab" onclick="switchTab('log')">Driveway Log</button>
+            <button class="tab-btn" onclick="switchTab('ban')">Ban List</button>
+            <button class="tab-btn" onclick="switchTab('storage')">Item Storage</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        
+        <div id="view-log" class="view-section active">
+            <div class="panel form-container">
+                <div class="form-header"><h2><i class="fas fa-clipboard-list"></i> &nbsp;Valet Driveway Log</h2></div>
+                <div id="successOverlayLog" class="success-overlay">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
+                    <div class="success-text">Log Submitted!</div>
+                </div>
+                <div class="form-body" id="formBodyLog">
+                    <form id="googleFormLog" target="hidden_iframe" onsubmit="return validateAndSubmitLog(event)" action="https://docs.google.com/forms/d/e/1FAIpQLScmnH3czFTZ34dGjE23YuYMMLyTO_JdjA_fjNxMBjz68-ClGg/formResponse" method="POST">
+                        <div class="q-group"><label class="label">License Plate <span style="color:red">*</span></label><div class="input-wrapper"><i class="fas fa-car-side"></i><input type="text" class="input-box" name="entry.1117440668" placeholder="e.g. AA 1234" required autocomplete="off"></div></div>
+                        <div class="q-group"><label class="label">Make/Model/Color <span style="color:red">*</span></label><div class="input-wrapper"><i class="fas fa-palette"></i><input type="text" class="input-box" name="entry.1311389228" placeholder="e.g. Honda/Civic/Black" required autocomplete="off"></div></div>
+                        <div class="q-group"><label class="label">Category <span style="color:red">*</span></label><div class="chip-container">
+                            <label class="chip-label"><input type="checkbox" name="entry.267845612" value="Legends"><span class="chip-text"><i class="fas fa-home"></i> Legends</span></label>
+                            <label class="chip-label"><input type="checkbox" name="entry.267845612" value="Delivery"><span class="chip-text"><i class="fas fa-truck"></i> Delivery</span></label>
+                            <label class="chip-label"><input type="checkbox" name="entry.267845612" value="Pick-up/Drop-off"><span class="chip-text"><i class="fas fa-people-arrows"></i> Pick-up/Drop-off</span></label>
+                            <label class="chip-label"><input type="checkbox" name="entry.267845612" value="Uber/Taxi"><span class="chip-text"><i class="fas fa-taxi"></i> Uber/Taxi</span></label>
+                            <label class="chip-label"><input type="checkbox" name="entry.267845612" value="Other"><span class="chip-text"><i class="fas fa-question-circle"></i> Other</span></label>
+                        </div></div>
+                        <div class="q-group"><label class="label">Description / Note</label><div class="input-wrapper"><i class="fas fa-sticky-note"></i><textarea class="input-box" name="entry.1086646485" placeholder="Details (e.g. Leaving vehicle on driveway unattended)" autocomplete="off"></textarea></div></div>
+                        <div class="q-group"><label class="label">Valet <span style="color:red">*</span></label><div class="input-wrapper"><i class="fas fa-user-circle"></i><input type="text" class="input-box" name="entry.1346596944" placeholder="Your Initials: eg. AA" required autocomplete="off" maxlength="5"></div></div>
+                        <button type="submit" class="submit-btn"><i class="fas fa-save"></i> &nbsp;Submit Log</button>
+                    </form>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="table-header-control"><input type="text" id="searchInputLog" class="search-bar" placeholder="Search Driveway Log..." onkeyup="filterTable('log')"></div>
+                <div class="table-wrap">
+                    <div id="loadingLog" style="padding:40px;text-align:center;color:#888;"><i class="fas fa-spinner fa-spin"></i> Loading Log...</div>
+                    <table id="dataTableLog" style="display:none;" data-sort-dir="asc">
+                        <thead><tr><th onclick="sortTable('log',0)">Timestamp</th><th onclick="sortTable('log',1)">License Plate</th><th onclick="sortTable('log',2)">Vehicle</th><th onclick="sortTable('log',3)">Category</th><th onclick="sortTable('log',4)">Note</th><th onclick="sortTable('log',5)">Valet</th></tr></thead><tbody id="tableBodyLog"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-ban" class="view-section theme-red">
+            <div class="panel form-container">
+                <div class="form-header"><h2><i class="fas fa-ban"></i> &nbsp;Ban List Form</h2></div>
+                <div id="successOverlayBan" class="success-overlay">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
+                    <div class="success-text">Ban Added!</div>
+                </div>
+                <div class="form-body" id="formBodyBan">
+                    <form id="googleFormBan" target="hidden_iframe" onsubmit="return validateAndSubmitBan(event)" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSdwBwZQ9d_Y_CXZ9BKaAfa7HPn2wzotysoUE-LyV9p98gA0ug/formResponse" method="POST">
+                        <div class="q-group"><label class="label">License Plate <span style="color:red">*</span></label><div class="input-wrapper"><i class="fas fa-car"></i><input type="text" class="input-box" name="entry.1117440668" placeholder="e.g. BAD-GUY" required autocomplete="off"></div></div>
+                        <div class="q-group"><label class="label">Make/Model/Color <span style="color:red">*</span></label><div class="input-wrapper"><i class="fas fa-palette"></i><input type="text" class="input-box" name="entry.1311389228" placeholder="e.g. Ford/F150/Red" required autocomplete="off"></div></div>
+                        <div class="q-group"><label class="label">Ban Type <span style="color:red">*</span></label><div class="desc-text urgent">When this car shows up: For Security Ban List, Call Security Immediately</div><div class="chip-container">
+                            <label class="chip-label"><input type="radio" name="entry.267845612" value="No Stopping on Driveway"><span class="chip-text"><i class="fas fa-hand-paper"></i> No Stopping on Driveway</span></label>
+                            <label class="chip-label"><input type="radio" name="entry.267845612" value="Security Ban List"><span class="chip-text"><i class="fas fa-shield-alt"></i> Security Ban List</span></label>
+                        </div></div>
+                        <div class="q-group"><label class="label">Details for the Ban <span style="color:red">*</span></label><div class="input-wrapper"><i class="fas fa-comment-slash"></i><textarea class="input-box" name="entry.1086646485" placeholder="Reason of the ban, include expiry date if it is a temporary ban." required autocomplete="off"></textarea></div></div>
+                        <div class="q-group"><label class="label">Approved By <span style="color:red">*</span></label><div class="desc-text">Choose Security if they are on the official ban list</div><div class="chip-container">
+                            <label class="chip-label"><input type="radio" name="entry.1346596944" value="Security"><span class="chip-text"><i class="fas fa-shield-alt"></i> Security</span></label>
+                            <label class="chip-label"><input type="radio" name="entry.1346596944" value="Valet Supervisor"><span class="chip-text"><i class="fas fa-user-tie"></i> Valet Supervisor</span></label>
+                            <label class="chip-label"><input type="radio" name="entry.1346596944" value="MOD"><span class="chip-text"><i class="fas fa-building"></i> MOD</span></label>
+                        </div></div>
+                        <button type="submit" class="submit-btn"><i class="fas fa-ban"></i> &nbsp;Submit Ban</button>
+                    </form>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="table-header-control"><input type="text" id="searchInputBan" class="search-bar" placeholder="Search Ban List..." onkeyup="filterTable('ban')"></div>
+                <div class="table-wrap">
+                    <div id="loadingBan" style="padding:40px;text-align:center;color:#888;"><i class="fas fa-spinner fa-spin"></i> Loading Ban List...</div>
+                    <table id="dataTableBan" style="display:none;" data-sort-dir="asc">
+                        <thead><tr><th onclick="sortTable('ban',0)">Timestamp</th><th onclick="sortTable('ban',1)">License Plate</th><th onclick="sortTable('ban',2)">Vehicle</th><th onclick="sortTable('ban',3)">Ban Type</th><th onclick="sortTable('ban',4)">Reason</th><th onclick="sortTable('ban',5)">Approved By</th></tr></thead><tbody id="tableBodyBan"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-storage" class="view-section theme-blue">
+            <div class="panel form-container">
+                <div class="form-header"><h2><i class="fas fa-boxes"></i> &nbsp;Item Storage Tracker</h2></div>
+                <div id="successOverlayStorage" class="success-overlay">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
+                    <div class="success-text">Item Logged!</div>
+                </div>
+                <div class="form-body" id="formBodyStorage">
+                    <form id="googleFormStorage" target="hidden_iframe" onsubmit="return validateAndSubmitStorage(event)" action="https://docs.google.com/forms/d/e/1FAIpQLSdqp0yO9Ar1AbxJA8yqEfy7edUAHVPXz40_lWgpYZPc_a6Wmw/formResponse" method="POST">
+                        <div class="q-group"><label class="label">Tag Number <span style="color:red">*</span></label><div class="input-wrapper"><i class="fas fa-tag"></i><input type="text" class="input-box" name="entry.1984218923" placeholder="e.g. 123" required autocomplete="off"></div></div>
+                        <div class="q-group"><label class="label">Location Stored <span style="color:red">*</span></label><div class="chip-container">
+                            <label class="chip-label"><input type="radio" name="entry.196505558" value="Bell Closet"><span class="chip-text"><i class="fas fa-door-closed"></i> Bell Closet</span></label>
+                            <label class="chip-label"><input type="radio" name="entry.196505558" value="Bell Office"><span class="chip-text"><i class="fas fa-briefcase"></i> Bell Office</span></label>
+                            <label class="chip-label"><input type="radio" name="entry.196505558" value="Juri Kurri"><span class="chip-text"><i class="fas fa-hockey-puck"></i> Juri Kurri</span></label>
+                        </div></div>
+                        <div class="q-group"><label class="label">Valet Initials <span style="color:red">*</span></label><div class="input-wrapper"><i class="fas fa-user-circle"></i><input type="text" class="input-box" name="entry.648735711" placeholder="e.g. SC" required autocomplete="off"></div></div>
+                        <div class="q-group"><label class="label">Number of Items <span style="color:red">*</span></label><div class="chip-container">
+                            <label class="chip-label"><input type="radio" name="entry.274409971" value="1"><span class="chip-text">1</span></label>
+                            <label class="chip-label"><input type="radio" name="entry.274409971" value="2"><span class="chip-text">2</span></label>
+                            <label class="chip-label"><input type="radio" name="entry.274409971" value="3"><span class="chip-text">3</span></label>
+                            <label class="chip-label"><input type="radio" name="entry.274409971" value="4"><span class="chip-text">4</span></label>
+                            <label class="chip-label"><input type="radio" name="entry.274409971" value="5"><span class="chip-text">5</span></label>
+                        </div></div>
+                        <button type="submit" class="submit-btn"><i class="fas fa-save"></i> &nbsp;Log Item</button>
+                    </form>
+                </div>
+            </div>
+            <div class="panel">
+                <div class="table-header-control"><input type="text" id="searchInputStorage" class="search-bar" placeholder="Search Storage..." onkeyup="filterTable('storage')"></div>
+                <div class="table-wrap">
+                    <div id="loadingStorage" style="padding:40px;text-align:center;color:#888;"><i class="fas fa-spinner fa-spin"></i> Loading Storage...</div>
+                    <table id="dataTableStorage" style="display:none;" data-sort-dir="asc">
+                        <thead><tr><th onclick="sortTable('storage',0)">Timestamp</th><th onclick="sortTable('storage',1)">Tag #</th><th onclick="sortTable('storage',2)">Location</th><th onclick="sortTable('storage',3)">Initials</th><th onclick="sortTable('storage',4)">Qty</th></tr></thead><tbody id="tableBodyStorage"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+    <script>
+        function switchTab(tabName) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active'); el.classList.remove('red-tab'); el.classList.remove('purple-tab'); el.classList.remove('blue-tab');
+            });
+
+            document.getElementById('view-' + tabName).classList.add('active');
+            const clickedBtn = event.target;
+            clickedBtn.classList.add('active');
+            const hero = document.getElementById('hero');
+            
+            if(tabName === 'ban') { hero.style.borderBottomColor = '#8b0000'; clickedBtn.classList.add('red-tab'); } 
+            else if(tabName === 'storage') { hero.style.borderBottomColor = '#283593'; clickedBtn.classList.add('blue-tab'); }
+            else { hero.style.borderBottomColor = '#4b0082'; clickedBtn.classList.add('purple-tab'); }
+        }
+
+        // --- VALIDATION & SUBMIT ---
+        function validateAndSubmitLog(event) {
+            const checkboxes = document.querySelectorAll('#googleFormLog input[name="entry.267845612"]');
+            let isChecked = false; checkboxes.forEach(box => { if (box.checked) isChecked = true; });
+            if (!isChecked) { event.preventDefault(); alert("Please select at least one Category."); return false; }
+            startAnimation('Log'); return true;
+        }
+
+        function validateAndSubmitBan(event) {
+            const banTypes = document.querySelectorAll('#googleFormBan input[name="entry.267845612"]');
+            let typeChecked = false; banTypes.forEach(r => { if (r.checked) typeChecked = true; });
+            const approvedBy = document.querySelectorAll('#googleFormBan input[name="entry.1346596944"]');
+            let appChecked = false; approvedBy.forEach(r => { if (r.checked) appChecked = true; });
+            const reason = document.querySelector('#googleFormBan textarea[name="entry.1086646485"]').value;
+            if (!reason.trim()) { event.preventDefault(); alert("Please enter the details/reason for the ban."); return false; }
+            if (!typeChecked) { event.preventDefault(); alert("Please select a Ban Type."); return false; }
+            if (!appChecked) { event.preventDefault(); alert("Please select who approved this ban."); return false; }
+            startAnimation('Ban'); return true;
+        }
+
+        function validateAndSubmitStorage(event) {
+            const loc = document.querySelectorAll('#googleFormStorage input[name="entry.196505558"]');
+            let locChecked = false; loc.forEach(r => { if(r.checked) locChecked = true; });
+            const qty = document.querySelectorAll('#googleFormStorage input[name="entry.274409971"]');
+            let qtyChecked = false; qty.forEach(r => { if(r.checked) qtyChecked = true; });
+            
+            if(!locChecked) { event.preventDefault(); alert("Please select a Location."); return false; }
+            if(!qtyChecked) { event.preventDefault(); alert("Please select Number of Items."); return false; }
+            startAnimation('Storage'); return true;
+        }
+
+        function startAnimation(type) {
+            const formBody = document.getElementById('formBody' + type);
+            const overlay = document.getElementById('successOverlay' + type);
+            setTimeout(() => {
+                formBody.style.opacity = '0';
+                overlay.style.display = 'flex';
+                setTimeout(() => { location.reload(); }, 2000);
+            }, 1000);
+        }
+
+        // --- FETCH DATA ---
+        const URL_LOG = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT9a2j2_aw4q5RzfchbR_ApILPKP71K36aK8JAORCNJ8kHSR7fAsYdf11An5CitFe6kLELt40BQ_rKd/pub?output=csv";
+        const URL_BAN = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ5JIbfJx4dmv_jb5Od7nOT-GQ5ybOfdjJcEPWMXjK3jZb4FX4rjn4A6zj7Ej1kGEJM7pgKijwCHKLi/pub?output=csv";
+        const URL_STO = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSw0NFYApMWSoOAtL5bJW1AeccHX6mGwjcXuzAEB5d_UzBJ00CUn4sbN4fKCp5jhmXxZiDD7LteK0FH/pub?output=csv";
+
+        let allRowsLog = [], allRowsBan = [], allRowsStorage = [];
+
+        async function fetchData() {
+            try {
+                const r1 = await fetch(URL_LOG + "&t=" + Date.now()); const t1 = await r1.text();
+                allRowsLog = parseCSV(t1); renderTable('log', allRowsLog);
+                document.getElementById('loadingLog').style.display='none'; document.getElementById('dataTableLog').style.display='table';
+            } catch (e) { console.error(e); }
+
+            try {
+                const r2 = await fetch(URL_BAN + "&t=" + Date.now()); const t2 = await r2.text();
+                allRowsBan = parseCSV(t2); renderTable('ban', allRowsBan);
+                document.getElementById('loadingBan').style.display='none'; document.getElementById('dataTableBan').style.display='table';
+            } catch (e) { console.error(e); }
+
+            try {
+                const r3 = await fetch(URL_STO + "&t=" + Date.now()); const t3 = await r3.text();
+                allRowsStorage = parseCSV(t3); renderTable('storage', allRowsStorage);
+                document.getElementById('loadingStorage').style.display='none'; document.getElementById('dataTableStorage').style.display='table';
+            } catch (e) { console.error(e); }
+        }
+
+        function parseCSV(text) {
+            return text.split('\n').slice(1).map(line => {
+                return line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(p => p ? p.replace(/^"|"$/g, '').trim() : '');
+            }).filter(r => r.length > 1);
+        }
+
+        function formatDate(rawDate, includeTime) {
+            const parts = rawDate.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})\s(\d{1,2}):(\d{2})/);
+            if (parts) {
+                const dd = parts[1].padStart(2,'0'); const mm = parts[2].padStart(2,'0');
+                const yyyy = parts[3]; const hh = parts[4].padStart(2,'0'); const min = parts[5];
+                return includeTime ? `${yyyy}-${mm}-${dd} ${hh}:${min}` : `${yyyy}-${mm}-${dd}`;
+            }
+            return rawDate; 
+        }
+
+        function renderTable(type, data) {
+            const tbody = document.getElementById('tableBody' + (type.charAt(0).toUpperCase() + type.slice(1)));
+            tbody.innerHTML = '';
+            
+            // Themes
+            let tBg, tCol, tBord;
+            if(type==='log') { tBg='#f3e5f5'; tCol='#4b0082'; tBord='#e1bee7'; }
+            else if(type==='ban') { tBg='#ffebee'; tCol='#8b0000'; tBord='#ffcdd2'; }
+            else { tBg='#e8eaf6'; tCol='#283593'; tBord='#c5cae9'; } // Storage Blue
+
+            data.forEach(cols => {
+                const ts = formatDate(cols[0] || '', type === 'log' || type === 'storage');
+                const c1 = cols[1] || ''; const c2 = cols[2] || ''; const c3 = cols[3] || '';
+                const c4 = cols[4] || '--'; const c5 = cols[5] || '';   
+
+                // Tags for Categories, Ban Types, Locations, Qty
+                const makeTag = (val) => val.split(',').map(c => c.trim() ? `<span style="background:${tBg}; color:${tCol}; padding:2px 8px; border-radius:10px; font-size:11px; margin-right:4px; border:1px solid ${tBord};">${c.trim()}</span>` : '').join('');
+
+                const tr = document.createElement('tr');
+                
+                if (type === 'log') {
+                    // Log: TS, Plate, Veh, Cats, Valet, Note
+                    tr.innerHTML = `<td style="color:#555;font-size:12px;font-family:monospace;">${ts}</td><td style="font-weight:700;color:#333;">${c1}</td><td>${c2}</td><td>${makeTag(c3)}</td><td style="color:#666;white-space:normal;min-width:300px;">${c5}</td><td style="font-weight:bold;color:${tCol};">${c4}</td>`;
+                } else if (type === 'ban') {
+                    // Ban: TS, Plate, Veh, Type, Approved, Reason
+                    tr.innerHTML = `<td style="color:#555;font-size:12px;font-family:monospace;">${ts}</td><td style="font-weight:700;color:#333;">${c1}</td><td>${c2}</td><td>${makeTag(c3)}</td><td style="color:#666;white-space:normal;min-width:300px;">${c4}</td><td style="font-weight:bold;color:${tCol};">${c5}</td>`;
+                } else {
+                    // Storage: TS, Tag, Loc, Initials, Qty
+                    // Sheet likely: TS, Tag, Loc, Initials, Qty
+                    tr.innerHTML = `<td style="color:#555;font-size:12px;font-family:monospace;">${ts}</td><td style="font-weight:700;color:#333;">${c1}</td><td>${makeTag(c2)}</td><td>${c3}</td><td style="font-weight:bold;color:${tCol};">${makeTag(c4)}</td>`;
+                }
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterTable(type) {
+            const term = document.getElementById('searchInput' + (type.charAt(0).toUpperCase() + type.slice(1))).value.toLowerCase();
+            let source = [];
+            if(type==='log') source = allRowsLog;
+            else if(type==='ban') source = allRowsBan;
+            else source = allRowsStorage;
+            
+            const filtered = source.filter(row => row.join(' ').toLowerCase().includes(term));
+            renderTable(type, filtered);
+        }
+
+        function sortTable(type, colIdx) {
+            const capType = type.charAt(0).toUpperCase() + type.slice(1);
+            const table = document.getElementById('dataTable' + capType);
+            const tbody = document.getElementById('tableBody' + capType);
+            
+            const curDir = table.getAttribute("data-sort-dir");
+            const newDir = curDir === "asc" ? "desc" : "asc";
+            table.setAttribute("data-sort-dir", newDir);
+
+            const rows = Array.from(tbody.rows);
+            rows.sort((a, b) => {
+                const x = a.cells[colIdx].innerText.toLowerCase();
+                const y = b.cells[colIdx].innerText.toLowerCase();
+                return newDir === "asc" ? (x > y ? 1 : -1) : (x < y ? 1 : -1);
+            });
+            rows.forEach(row => tbody.appendChild(row));
+            
+            table.querySelectorAll("thead th").forEach(th => th.style.color = "");
+            const activeColor = type==='log' ? '#4b0082' : (type==='ban' ? '#8b0000' : '#283593');
+            table.querySelectorAll("thead th")[colIdx].style.color = activeColor;
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>
