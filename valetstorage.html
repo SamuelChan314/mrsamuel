@@ -191,7 +191,7 @@
         thead th {
             position: sticky; top: 0; background: #f1f1f1;
             color: var(--secondary); font-weight: 700; text-align: left;
-            padding: 14px 12px; /* reduced padding */
+            padding: 14px 12px; 
             border-bottom: 2px solid #ccc;
             white-space: nowrap; cursor: pointer; user-select: none; z-index: 5;
             transition: background 0.2s;
@@ -200,10 +200,10 @@
         thead th::after { content: '\2195'; opacity: 0.3; margin-left: 6px; font-weight: normal; font-size: 11px; }
 
         tbody td {
-            padding: 12px 12px; /* reduced padding */
+            padding: 12px 12px; 
             border-bottom: 1px solid #eee;
             color: var(--text-main); vertical-align: middle; 
-            white-space: normal; /* allow wrapping if needed */
+            white-space: normal; 
         }
         tbody tr:hover { background-color: #e8eaf6; }
 
@@ -393,7 +393,14 @@
                     return parts.map(p => p ? p.replace(/^"|"$/g, '').trim() : '');
                 }).filter(r => r.length > 1);
 
-                renderTable(allRows);
+                // Smart Refresh: If searching, keep the search results. If not, show all.
+                const searchTerm = document.getElementById('searchInput').value;
+                if(searchTerm) {
+                    filterTable();
+                } else {
+                    renderTable(allRows);
+                }
+
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('dataTable').style.display = 'table';
             } catch (err) {
@@ -405,24 +412,20 @@
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
             
-            // Storage Theme Colors
             const tagBg = '#e8eaf6';
             const tagColor = '#283593';
             const tagBorder = '#c5cae9';
 
             data.forEach(cols => {
-                // Indices shifted because timestamp is hidden
                 const tagNum = cols[1] || '';
                 const loc = cols[2] || '';
                 const init = cols[3] || '';
                 const qty = cols[4] || ''; 
 
-                // Format Location Tag
                 const locHTML = loc.split(',').map(c => 
                     c.trim() ? `<span style="background:${tagBg}; color:${tagColor}; padding:2px 8px; border-radius:10px; font-size:11px; margin-right:4px; border:1px solid ${tagBorder}; display:inline-block; margin-bottom:2px;">${c.trim()}</span>` : ''
                 ).join('');
 
-                // Format Qty Tag
                 const qtyHTML = qty ? `<span style="background:${tagBg}; color:${tagColor}; padding:2px 8px; border-radius:10px; font-size:11px; border:1px solid ${tagBorder}; font-weight:bold;">${qty}</span>` : '';
 
                 const tr = document.createElement('tr');
@@ -464,7 +467,11 @@
             table.querySelectorAll("thead th")[columnIndex].style.color = "var(--primary)";
         }
 
+        // Initial fetch
         fetchData();
+
+        // Auto-refresh every 30 seconds
+        setInterval(fetchData, 30000);
     </script>
 </body>
 </html>
