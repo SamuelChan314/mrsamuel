@@ -186,12 +186,13 @@
 
         .table-wrap { flex: 1; overflow: auto; }
         
-        table { width: 100%; min-width: 900px; border-collapse: collapse; font-size: 13px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
         
         thead th {
             position: sticky; top: 0; background: #f1f1f1;
             color: var(--secondary); font-weight: 700; text-align: left;
-            padding: 14px 18px; border-bottom: 2px solid #ccc;
+            padding: 14px 12px; /* reduced padding */
+            border-bottom: 2px solid #ccc;
             white-space: nowrap; cursor: pointer; user-select: none; z-index: 5;
             transition: background 0.2s;
         }
@@ -199,8 +200,10 @@
         thead th::after { content: '\2195'; opacity: 0.3; margin-left: 6px; font-weight: normal; font-size: 11px; }
 
         tbody td {
-            padding: 12px 18px; border-bottom: 1px solid #eee;
-            color: var(--text-main); vertical-align: top; white-space: nowrap; 
+            padding: 12px 12px; /* reduced padding */
+            border-bottom: 1px solid #eee;
+            color: var(--text-main); vertical-align: middle; 
+            white-space: normal; /* allow wrapping if needed */
         }
         tbody tr:hover { background-color: #e8eaf6; }
 
@@ -216,6 +219,7 @@
             .view-section { flex-direction: column; }
             .panel { min-height: auto; flex: none; width: 100%; }
             .form-container { max-height: none; }
+            /* Table wrap fixed height to allow internal scrolling */
             .table-wrap { max-height: 500px; border-top: 1px solid #eee; }
             .hero-banner { padding: 25px 20px; }
             .hero-banner h1 { font-size: 26px; }
@@ -316,8 +320,8 @@
                             <tr>
                                 <th style="width: 25%" onclick="sortTable(0)">Tag #</th>
                                 <th style="width: 40%" onclick="sortTable(1)">Location</th>
-                                <th style="width: 20%" onclick="sortTable(2)">Initials</th>
-                                <th style="width: 15%" onclick="sortTable(3)">Qty</th> 
+                                <th style="width: 20%; text-align:center;" onclick="sortTable(2)">Initials</th>
+                                <th style="width: 15%; text-align:center;" onclick="sortTable(3)">Qty</th> 
                             </tr>
                         </thead>
                         <tbody id="tableBody"></tbody>
@@ -407,7 +411,7 @@
             const tagBorder = '#c5cae9';
 
             data.forEach(cols => {
-                // Timestamp removed from display, so indices shift
+                // Indices shifted because timestamp is hidden
                 const tagNum = cols[1] || '';
                 const loc = cols[2] || '';
                 const init = cols[3] || '';
@@ -415,7 +419,7 @@
 
                 // Format Location Tag
                 const locHTML = loc.split(',').map(c => 
-                    c.trim() ? `<span style="background:${tagBg}; color:${tagColor}; padding:2px 8px; border-radius:10px; font-size:11px; margin-right:4px; border:1px solid ${tagBorder};">${c.trim()}</span>` : ''
+                    c.trim() ? `<span style="background:${tagBg}; color:${tagColor}; padding:2px 8px; border-radius:10px; font-size:11px; margin-right:4px; border:1px solid ${tagBorder}; display:inline-block; margin-bottom:2px;">${c.trim()}</span>` : ''
                 ).join('');
 
                 // Format Qty Tag
@@ -425,8 +429,8 @@
                 tr.innerHTML = `
                     <td style="font-weight:700; color:#333;">${tagNum}</td>
                     <td>${locHTML}</td>
-                    <td style="color:#555;">${init}</td>
-                    <td>${qtyHTML}</td>
+                    <td style="color:#555; text-align:center;">${init}</td>
+                    <td style="text-align:center;">${qtyHTML}</td>
                 `;
                 tbody.appendChild(tr);
             });
