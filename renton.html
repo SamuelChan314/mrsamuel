@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shift Start</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600&family=Archivo+Black&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --slate:#C9D2DA;
+    --panel:#EDF1F4;
+    --ink:#10161C;
+    --muted:#5A6B78;
+    --line:#A9B6C0;
+    --indigo:#22307A;
+    --signal:#F0C019;
+    --radius:3px;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    padding:48px 24px 72px;
+    background:var(--slate);
+    background-image:linear-gradient(var(--line) 1px,transparent 1px);
+    background-size:100% 34px;
+    color:var(--ink);
+    font-family:'Archivo',system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.55;
+  }
+
+  .wrap{max-width:760px;margin:0 auto;}
+
+  .eyebrow{
+    font-family:'DM Mono',monospace;
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0 0 10px;
+  }
+
+  h1{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(40px,9vw,72px);
+    line-height:.95;
+    letter-spacing:-.03em;
+    margin:0;
+    text-transform:uppercase;
+  }
+
+  .desc{
+    max-width:46ch;
+    margin:16px 0 0;
+    color:var(--muted);
+  }
+
+  .clock{
+    font-family:'DM Mono',monospace;
+    font-size:13px;
+    color:var(--ink);
+    margin:22px 0 0;
+    padding-top:14px;
+    border-top:2px solid var(--ink);
+  }
+
+  .launch{
+    position:relative;
+    display:inline-block;
+    margin:36px 0 10px;
+  }
+
+  .launch::after{
+    content:"";
+    position:absolute;
+    inset:6px -6px -6px 6px;
+    background:var(--signal);
+    z-index:0;
+    border-radius:var(--radius);
+  }
+
+  #openAll{
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    background:var(--indigo);
+    color:#fff;
+    border:none;
+    border-radius:var(--radius);
+    padding:18px 28px;
+    font-family:'Archivo Black',sans-serif;
+    font-size:17px;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:transform .12s ease;
+  }
+
+  #openAll .n{
+    font-family:'DM Mono',monospace;
+    font-weight:500;
+    font-size:13px;
+    text-transform:none;
+    letter-spacing:0;
+    color:var(--signal);
+  }
+
+  #openAll:hover{transform:translate(3px,3px);}
+  #openAll:active{transform:translate(6px,6px);}
+  #openAll:focus-visible{outline:3px solid var(--ink);outline-offset:4px;}
+  #openAll[disabled]{cursor:progress;transform:translate(6px,6px);}
+
+  .hint{
+    font-family:'DM Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+    margin:0 0 34px;
+    max-width:52ch;
+  }
+
+  ol{list-style:none;margin:0;padding:0;}
+
+  .slot{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-left:6px solid var(--line);
+    border-radius:var(--radius);
+    padding:14px 16px 14px 14px;
+    margin-bottom:8px;
+    transition:border-left-color .2s ease,transform .2s ease;
+  }
+
+  .slot:hover{border-left-color:var(--indigo);transform:translateX(3px);}
+  .slot.firing{border-left-color:var(--signal);background:#fff;}
+  .slot.solo{border-left-style:double;border-left-width:8px;}
+
+  .num{
+    font-family:'DM Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+    min-width:22px;
+  }
+
+  .meta{flex:1;min-width:0;}
+
+  .name{
+    font-weight:600;
+    font-size:17px;
+    letter-spacing:-.01em;
+  }
+
+  .note{
+    font-family:'DM Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .go{
+    flex-shrink:0;
+    text-decoration:none;
+    color:var(--ink);
+    background:none;
+    border:1.5px solid var(--ink);
+    border-radius:var(--radius);
+    padding:8px 16px;
+    font-family:'DM Mono',monospace;
+    font-size:12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background .15s ease,color .15s ease;
+  }
+
+  .go:hover{background:var(--ink);color:var(--panel);}
+  .go:focus-visible{outline:3px solid var(--indigo);outline-offset:3px;}
+
+  footer{
+    margin-top:40px;
+    padding-top:16px;
+    border-top:1px solid var(--line);
+    font-family:'DM Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+  }
+
+  /* ---------- Sudoku ---------- */
+
+  .sudoku{
+    margin-top:40px;
+    padding:22px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-top:6px solid var(--indigo);
+    border-radius:var(--radius);
+  }
+
+  .sudoku-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:20px;
+    margin-bottom:18px;
+  }
+
+  .sudoku h2{
+    margin:0;
+    font-family:'Archivo Black',sans-serif;
+    font-size:32px;
+    line-height:1;
+    text-transform:uppercase;
+    letter-spacing:-.02em;
+  }
+
+  .sudoku-head .eyebrow{margin-bottom:6px;}
+  .sudoku-difficulty{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px;}
+  .sudoku-difficulty .go.active{background:var(--ink);color:var(--panel);}
+  .candidate-toggle{display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);cursor:pointer;user-select:none;}
+  .candidate-toggle input{accent-color:var(--indigo);width:16px;height:16px;}
+  .sudoku-cell.candidate-mode{font-size:12px;}
+  .sudoku-cell.has-candidates{color:var(--indigo);font-size:clamp(9px,2vw,13px);letter-spacing:-.04em;}
+
+  .sudoku-grid{
+    width:min(100%,540px);
+    aspect-ratio:1;
+    display:grid;
+    grid-template-columns:repeat(9,1fr);
+    border:3px solid var(--ink);
+    margin:0 auto;
+    background:var(--ink);
+    gap:1px;
+  }
+
+  .sudoku-cell{
+    position:relative;
+    min-width:0;
+    min-height:0;
+    border:0;
+    background:#fff;
+    color:var(--ink);
+    font-family:'DM Mono',monospace;
+    font-size:clamp(18px,4vw,28px);
+    text-align:center;
+    outline:none;
+  }
+
+  .sudoku-cell.given{
+    background:#E1E6EA;
+    font-weight:500;
+  }
+
+  .sudoku-cell:not(.given){cursor:text;}
+
+  .sudoku-cell:focus{
+    background:#FFF4BF;
+    box-shadow:inset 0 0 0 3px var(--signal);
+  }
+
+  .sudoku-cell.wrong{
+    background:#F5CCCC;
+    color:#8B1E1E;
+  }
+
+  .sudoku-cell.correct{
+    background:#D8E9D7;
+    color:#235A28;
+  }
+
+  .sudoku-cell:nth-child(3n){border-right:3px solid var(--ink);}
+  .sudoku-cell:nth-child(9n){border-right:0;}
+
+  .sudoku-cell:nth-child(n+19):nth-child(-n+27),
+  .sudoku-cell:nth-child(n+46):nth-child(-n+54){
+    border-bottom:3px solid var(--ink);
+  }
+
+  .sudoku-cell:nth-child(n+73){border-bottom:0;}
+
+  .sudoku-foot{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+
+  #sudokuStatus{
+    font-family:'DM Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+  }
+  /* ---------- End of game-specific styles ---------- */
+
+  @media (max-width:520px){
+    .slot{flex-wrap:wrap;}
+    .meta{flex-basis:100%;order:2;}
+    .go{order:3;margin-left:auto;}
+
+    .sudoku{padding:14px;}
+    .sudoku-head{
+      align-items:flex-start;
+      flex-direction:column;
+    }
+    .sudoku-grid{width:100%;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;}
+  }
+</style>
+<style>
+.tower-defense{margin-top:24px}.tower-head{display:flex;justify-content:space-between;gap:12px}.tower-stats{display:flex;gap:6px;flex-wrap:wrap}.tower-stat,.turret-choice{border:1px solid var(--line);background:var(--panel);padding:7px;font-family:inherit}.tower-controls{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.tower-layout{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:10px}.tower-board-wrap{border:1px solid var(--line);background:#dfe8d7;position:relative}#towerCanvas{display:block;width:100%;height:500px}.tower-panel{border:1px solid var(--line);padding:10px}.turret-list{display:grid;gap:6px}.turret-choice{width:100%;text-align:left;cursor:pointer}.turret-choice.selected{background:var(--soft);border-color:var(--ink)}.turret-cost{float:right}.tower-help,.tower-log{font-size:11px;color:var(--muted);line-height:1.4;margin-top:10px}@media(max-width:760px){.tower-layout{grid-template-columns:1fr}#towerCanvas{height:430px}}
+
+  /* ---------- Chess ---------- */
+  .chess-game{margin-top:24px;padding:22px;background:var(--panel);border:1px solid var(--line);border-top:6px solid var(--indigo);border-radius:var(--radius);}
+  .chess-head h2{margin:0;font-family:'Archivo Black',sans-serif;font-size:32px;line-height:1;text-transform:uppercase;letter-spacing:-.02em;}
+  .chess-controls{display:flex;gap:7px;flex-wrap:wrap;margin:18px 0;}
+  .chess-controls .active{background:var(--ink);color:var(--panel);}
+  .chess-layout{display:grid;grid-template-columns:540px 230px;gap:18px;align-items:start;overflow-x:auto;}
+  /* Fixed-size chessboard: it never grows or shrinks when pieces move. */
+  .chess-board{
+    width:540px;
+    height:540px;
+    min-width:540px;
+    min-height:540px;
+    max-width:540px;
+    max-height:540px;
+    flex:0 0 540px;
+    display:grid;
+    grid-template-columns:repeat(8,1fr);
+    grid-template-rows:repeat(8,1fr);
+    border:4px solid var(--ink);
+    box-shadow:0 4px 0 rgba(16,22,28,.12);
+    overflow:hidden;
+    box-sizing:border-box;
+  }
+  .chess-square{
+    width:100%;
+    height:100%;
+    min-width:0;
+    min-height:0;
+    border:0;
+    padding:0;
+    margin:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    cursor:pointer;
+    font-family:"Segoe UI Symbol","Noto Sans Symbols 2",sans-serif;
+    font-size:48px;
+    line-height:1;
+    user-select:none;
+    box-sizing:border-box;
+  }
+  .chess-square.light{background:#f0d9b5;}
+  .chess-square.dark{background:#b58863;}
+  .chess-square:hover{filter:brightness(1.08);}
+  .chess-square.selected{box-shadow:inset 0 0 0 5px var(--signal);}
+  .chess-square.legal::after{content:"";position:absolute;width:22%;height:22%;border-radius:50%;background:rgba(34,48,122,.55);}
+  .chess-square.capture::after{content:"";position:absolute;inset:6%;border:5px solid rgba(139,30,30,.7);border-radius:50%;}
+  .chess-piece{position:relative;z-index:1;text-shadow:0 2px 1px rgba(0,0,0,.25);pointer-events:none;}
+  .chess-side{border:1px solid var(--line);padding:14px;background:#fff;font-family:'DM Mono',monospace;font-size:12px;}
+  .chess-side h3{margin:0 0 12px;font-family:'Archivo Black',sans-serif;font-size:18px;text-transform:uppercase;}
+  .chess-status{margin:14px 0;padding:10px;background:#edf1f4;border-left:4px solid var(--indigo);font-weight:500;}
+  .chess-note{margin-top:14px;color:var(--muted);line-height:1.5;}
+  @media(max-width:760px){
+    .chess-layout{grid-template-columns:540px;overflow-x:auto;padding-bottom:6px;}
+    .chess-board{margin:0;}
+    .chess-side{max-width:540px;margin:0;width:100%;}
+  }
+</style></head>
+
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Workstation setup</p>
+    <h1>Shift Start</h1>
+    <p class="desc">Every tool I open when I sit down, in one press. Open them all at once, or pick one off the rack.</p>
+    <p class="clock" id="clock"></p>
+  </header>
+
+  <div class="launch">
+    <button id="openAll" type="button">
+      Open all <span class="n" id="count"></span>
+    </button>
+  </div>
+
+  <p class="hint">
+    First run only: your browser may block this. Choose "Always allow pop-ups from this site."
+  </p>
+
+  <ol id="rack"></ol>
+
+  <section class="sudoku" aria-label="Sudoku puzzle">
+    <div class="sudoku-head">
+      <div>
+        <p class="eyebrow">Shift break</p>
+        <h2>Sudoku</h2>
+      </div>
+      <button id="newSudoku" class="go" type="button">New puzzle</button>
+    </div>
+
+    <div class="sudoku-difficulty" aria-label="Sudoku difficulty">
+      <button class="go sudoku-difficulty-button active" data-difficulty="easy" type="button">Easy</button>
+      <button class="go sudoku-difficulty-button" data-difficulty="medium" type="button">Medium</button>
+      <button class="go sudoku-difficulty-button" data-difficulty="hard" type="button">Hard</button>
+    </div>
+
+    <div id="sudokuGrid" class="sudoku-grid"></div>
+
+    <div class="sudoku-foot">
+      <span id="sudokuStatus">Fill in the grid.</span>
+      <label class="candidate-toggle"><input id="candidateMode" type="checkbox"> Candidate mode</label>
+      <button id="checkSudoku" class="go" type="button">Check</button>
+    </div>
+  </section>
+
+  <footer>Add or remove links in the LINKS list in the JavaScript section of this file. Sudoku is included below.</footer>
+</div>
+
+<script>
+/* ================================================================
+   LINKS — edit this list to change your startup tools.
+================================================================ */
+
+const LINKS = [
+  {
+    name: "Zinc",
+    note: "Zinc Chat",
+    solo: true,
+    width: 520,
+    height: 900,
+    url: "https://zinc-app.com/conversations?sidebar=conversations"
+  },
+  {
+    name: "GXP Chat",
+    note: "AYS Chat",
+    url: "https://marriottintl.lightning.force.com/lightning/o/Case/list?filterName=Chat"
+  },
+  {
+    name: "Checklist",
+    note: "Sharepoint Checklist",
+    url: "https://marriottonline.sharepoint.com/sites/YEGJW-GroupData/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FYEGJW%2DGroupData%2FShared%20Documents%2FGroupData%2FFrontOffice%2F2%2E%20Checklists&viewid=b25dd90e%2Dba37%2D4e74%2D9867%2D9daf80393126&sharingv2=true&fromShare=true&at=9&CT=1785620975858&OR=OWA%2DNT%2DMail&CID=5eccfcfe%2Dca25%2Dad5a%2D98d2%2Dd25d8036e7d7&SI=NonSentItems&SLSync=Y&FolderCTID=0x0120000663789566092E4F8ADECC0957178C12"
+  },
+  {
+    name: "Google Keep",
+    note: "Google Keep",
+    url: "https://keep.google.com/#home"
+  },
+  {
+    name: "JW Calendar",
+    note: "JW Calendar",
+    url: "https://marriottonline-my.sharepoint.com/personal/dzhuk613_marriott_com/Lists/YEGJW%20Hotel%20Wide/AllItems.aspx"
+  },
+  {
+    name: "IRD Menu",
+    note: "IRD",
+    url: "https://guest.iris.net/YEGJW/outlet/order/e9555a94-99f8-4400-a42d-b68f8e65ca26/"
+  },
+  {
+    name: "AAS",
+    note: "AYS Alert",
+    url: "https://marriott.aas-att.com/dashboard"
+  },
+  {
+    name: "Canva",
+    note: "Canva",
+    width: 1200,
+    height: 900,
+    url: "https://www.canva.com/"
+  },
+  {
+    name: "Self Parking Portal",
+    note: "Offstreet Self Parking Portal",
+    url: "https://dashboard-login.offstreet.io/login?state=hKFo2SA1cjRlelItNVhQYWRuY2ZZOFZaaGlZTE1GbFpJN29uRKFupWxvZ2luo3RpZNkgY1kxc1F2SmpWU0lycDRpMllyVldlX3VoWFluaW9JUVajY2lk2SBiRFB6T1hMMVFZQ1cyRHRiSGV4dHpPa1ZQbkM1QWlvTA&client=bDPzOXL1QYCW2DtbHextzOkVPnC5AioL&protocol=oauth2&redirect_uri=https%3A%2F%2Fdashboard.offstreet.io&audience=https%3A%2F%2Fogr-api.offstreet.io&wl=null&scope=openid%20profile%20email%20offline_access&response_type=code&response_mode=query&nonce=WWtCLURjekFuQ1VVRTJIc2Y4S0dXZjhiVl8wYVVKV1F%2BYXFTWDAxeTVFOA%3D%3D&code_challenge=E-Fexj79sXcpxh8Yj4aFZG6FIqmAX8x9x-I4FggmJKU&code_challenge_method=S256&auth0Client=eyJuYW1lIjoiQGF1dGgwL2F1dGgwLWFuZ3VsYXIiLCJ2ZXJzaW9uIjoiMS45LjAifQ%3D%3D"
+  }
+];
+
+/* ================================================================
+   STARTUP LINKS
+================================================================ */
+
+function openLink(link, index) {
+  if (link.solo) {
+    const w = link.width || 520;
+    const h = link.height || 900;
+    const left = Math.max(0, (screen.availWidth || 1440) - w - 40);
+
+    const features =
+      `popup=yes,width=${w},height=${h},left=${left},top=40,` +
+      `resizable=yes,scrollbars=yes`;
+
+    const win = window.open(link.url, "solo_" + index, features);
+
+    if (win) {
+      win.opener = null;
+    }
+  } else {
+    window.open(link.url, "_blank", "noopener,noreferrer");
+  }
+}
+
+const rack = document.getElementById("rack");
+
+LINKS.forEach((link, i) => {
+  const li = document.createElement("li");
+  li.className = "slot" + (link.solo ? " solo" : "");
+
+  li.innerHTML = `
+    <span class="num">${String(i + 1).padStart(2, "0")}</span>
+    <span class="meta">
+      <div class="name"></div>
+      <div class="note"></div>
+    </span>
+  `;
+
+  li.querySelector(".name").textContent = link.name;
+  li.querySelector(".note").textContent = link.note || link.url;
+
+  let go;
+
+  if (link.solo) {
+    go = document.createElement("button");
+    go.type = "button";
+    go.textContent = "Window";
+    go.addEventListener("click", () => openLink(link, i));
+  } else {
+    go = document.createElement("a");
+    go.href = link.url;
+    go.target = "_blank";
+    go.rel = "noopener noreferrer";
+    go.textContent = "Open";
+  }
+
+  go.className = "go";
+  li.appendChild(go);
+  rack.appendChild(li);
+});
+
+document.getElementById("count").textContent =
+  `${LINKS.filter(link => !link.solo).length} tabs + ` +
+  `${LINKS.filter(link => link.solo).length} window`;
+
+const openAllButton = document.getElementById("openAll");
+
+openAllButton.addEventListener("click", () => {
+  openAllButton.disabled = true;
+
+  const slots = rack.querySelectorAll(".slot");
+
+  LINKS.forEach((link, i) => {
+    setTimeout(() => {
+      openLink(link, i);
+
+      slots[i].classList.add("firing");
+
+      setTimeout(() => {
+        slots[i].classList.remove("firing");
+      }, 600);
+
+      if (i === LINKS.length - 1) {
+        setTimeout(() => {
+          openAllButton.disabled = false;
+        }, 400);
+      }
+    }, i * 220);
+  });
+});
+
+/* ================================================================
+   CLOCK
+================================================================ */
+
+function tick() {
+  const now = new Date();
+
+  const day = now.toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "short",
+    day: "numeric"
+  });
+
+  const time = now.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  const hour = now.getHours();
+  const greet =
+    hour < 12
+      ? "Good morning"
+      : hour < 17
+        ? "Good afternoon"
+        : "Good evening";
+
+  document.getElementById("clock").textContent =
+    `${greet} — ${day}, ${time}`;
+}
+
+tick();
+setInterval(tick, 1000 * 20);
+
+/* ================================================================
+   SUDOKU
+================================================================ */
+
+const sudokuGrid = document.getElementById("sudokuGrid");
+const sudokuStatus = document.getElementById("sudokuStatus");
+const newSudokuButton = document.getElementById("newSudoku");
+const checkSudokuButton = document.getElementById("checkSudoku");
+const candidateMode = document.getElementById("candidateMode");
+const difficultyButtons = document.querySelectorAll(".sudoku-difficulty-button");
+
+let sudokuSolution = [];
+let sudokuPuzzle = [];
+let sudokuDifficulty = "easy";
+
+const SUDOKU_REMOVALS = { easy: 38, medium: 48, hard: 55 };
+
+function shuffle(array) {
+  const copy = [...array];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function isSafe(board, row, col, num) {
+  for (let c = 0; c < 9; c++) if (board[row][c] === num) return false;
+  for (let r = 0; r < 9; r++) if (board[r][col] === num) return false;
+  const br = Math.floor(row / 3) * 3, bc = Math.floor(col / 3) * 3;
+  for (let r = br; r < br + 3; r++)
+    for (let c = bc; c < bc + 3; c++)
+      if (board[r][c] === num) return false;
+  return true;
+}
+
+function generateSolution() {
+  const board = Array.from({length:9}, () => Array(9).fill(0));
+  function solve() {
+    let row=-1,col=-1;
+    for (let r=0;r<9 && row<0;r++) for (let c=0;c<9;c++)
+      if (!board[r][c]) { row=r; col=c; break; }
+    if (row<0) return true;
+    for (const n of shuffle([1,2,3,4,5,6,7,8,9])) {
+      if (isSafe(board,row,col,n)) {
+        board[row][col]=n;
+        if (solve()) return true;
+        board[row][col]=0;
+      }
+    }
+    return false;
+  }
+  solve();
+  return board;
+}
+
+function countSolutions(board, limit=2) {
+  let count=0;
+  function solve() {
+    if (count>=limit) return;
+    let best=null;
+    for(let r=0;r<9;r++) for(let c=0;c<9;c++) {
+      if(board[r][c]) continue;
+      const candidates=[];
+      for(let n=1;n<=9;n++) if(isSafe(board,r,c,n)) candidates.push(n);
+      if(!candidates.length) return;
+      if(!best || candidates.length<best.candidates.length) best={r,c,candidates};
+    }
+    if(!best){count++;return;}
+    for(const n of best.candidates){
+      board[best.r][best.c]=n;
+      solve();
+      board[best.r][best.c]=0;
+      if(count>=limit)return;
+    }
+  }
+  solve();
+  return count;
+}
+
+function makePuzzle(solution) {
+  const puzzle=solution.map(row=>[...row]);
+  let removed=0;
+  for(const pos of shuffle(Array.from({length:81},(_,i)=>i))) {
+    if(removed>=SUDOKU_REMOVALS[sudokuDifficulty]) break;
+    const r=Math.floor(pos/9), c=pos%9, backup=puzzle[r][c];
+    puzzle[r][c]=0;
+    if(countSolutions(puzzle.map(row=>[...row]),2)===1) removed++;
+    else puzzle[r][c]=backup;
+  }
+  return puzzle;
+}
+
+function getCandidates(row,col) {
+  const cells=sudokuGrid.children, out=[];
+  for(let n=1;n<=9;n++){
+    let ok=true;
+    for(let c=0;c<9;c++) if(c!==col && cells[row*9+c].value===String(n)) ok=false;
+    for(let r=0;r<9;r++) if(r!==row && cells[r*9+col].value===String(n)) ok=false;
+    const br=Math.floor(row/3)*3, bc=Math.floor(col/3)*3;
+    for(let r=br;r<br+3;r++) for(let c=bc;c<bc+3;c++)
+      if((r!==row||c!==col)&&cells[r*9+c].value===String(n)) ok=false;
+    if(ok) out.push(n);
+  }
+  return out;
+}
+
+function refreshCandidates() {
+  if(!candidateMode.checked)return;
+  [...sudokuGrid.children].forEach((cell,i)=>{
+    if(cell.classList.contains("given") || cell.value)return;
+    cell.placeholder=getCandidates(Math.floor(i/9),i%9).join(" ");
+  });
+}
+
+function renderSudoku() {
+  sudokuGrid.innerHTML="";
+  for(let row=0;row<9;row++) for(let col=0;col<9;col++){
+    const input=document.createElement("input");
+    input.className="sudoku-cell";
+    input.type="text"; input.inputMode="numeric"; input.maxLength=1;
+    input.setAttribute("aria-label",`Row ${row+1}, column ${col+1}`);
+    if(sudokuPuzzle[row][col]){
+      input.value=sudokuPuzzle[row][col];
+      input.readOnly=true; input.classList.add("given");
+    } else {
+      input.addEventListener("input",()=>{
+        input.value=input.value.replace(/[^1-9]/g,"").slice(-1);
+        input.classList.remove("wrong","correct");
+        sudokuStatus.textContent="Fill in the grid.";
+        refreshCandidates();
+      });
+    }
+    sudokuGrid.appendChild(input);
+  }
+  refreshCandidates();
+}
+
+function newSudoku(){
+  sudokuSolution=generateSolution();
+  sudokuPuzzle=makePuzzle(sudokuSolution);
+  renderSudoku();
+  sudokuStatus.textContent=`${sudokuDifficulty[0].toUpperCase()+sudokuDifficulty.slice(1)} puzzle generated.`;
+}
+
+function checkSudoku(){
+  if(candidateMode.checked){
+    sudokuStatus.textContent="Turn off Candidate mode before checking.";
+    return;
+  }
+  let complete=true, wrong=0;
+  sudokuGrid.querySelectorAll(".sudoku-cell").forEach((cell,i)=>{
+    if(cell.classList.contains("given"))return;
+    const r=Math.floor(i/9), c=i%9, answer=Number(cell.value);
+    cell.classList.remove("wrong","correct");
+    if(!answer){complete=false;return;}
+    if(answer===sudokuSolution[r][c])cell.classList.add("correct");
+    else{cell.classList.add("wrong");wrong++;}
+  });
+  if(wrong)sudokuStatus.textContent=`${wrong} incorrect ${wrong===1?"entry":"entries"}.`;
+  else if(!complete)sudokuStatus.textContent="Looking good. Keep going.";
+  else sudokuStatus.textContent="Solved. Nice work.";
+}
+
+difficultyButtons.forEach(button=>button.addEventListener("click",()=>{
+  sudokuDifficulty=button.dataset.difficulty;
+  difficultyButtons.forEach(b=>b.classList.toggle("active",b===button));
+  newSudoku();
+}));
+
+candidateMode.addEventListener("change",()=>{
+  [...sudokuGrid.children].forEach(cell=>cell.placeholder="");
+  if(candidateMode.checked){
+    sudokuStatus.textContent="Candidate mode on. Possible numbers appear in empty cells.";
+    refreshCandidates();
+  } else sudokuStatus.textContent="Candidate mode off.";
+});
+
+newSudokuButton.addEventListener("click",newSudoku);
+checkSudokuButton.addEventListener("click",checkSudoku);
+
+newSudoku();
+
+</script>
+
+<section class="game-section tower-defense" id="towerDefense">
+<div class="tower-head"><div><div class="eyebrow">GAME 02</div><h2>Tower Defense</h2><p class="muted">Build your defense before each wave. The path changes when you generate a new map.</p></div>
+<div class="tower-stats"><span class="tower-stat">Money: $<b id="tdMoney">180</b></span><span class="tower-stat">Lives: <b id="tdLives">20</b></span><span class="tower-stat">Wave: <b id="tdWave">0</b></span></div></div>
+<div class="tower-controls"><button id="tdStart" class="go" type="button">Start round</button><button id="tdPause" class="go" type="button">Pause</button><button id="tdMap" class="go" type="button">New map</button><button id="tdReset" class="go" type="button">Reset</button></div>
+<div class="tower-layout"><div class="tower-board-wrap"><canvas id="towerCanvas" width="900" height="500"></canvas></div>
+<aside class="tower-panel"><h3>Keyboard Turrets</h3><div class="turret-list" id="tdTurrets"></div><div class="tower-help">Place turrets before starting a wave. Click a turret, then click grass. Turrets cannot overlap the path or each other.</div><div class="tower-log" id="tdLog">Ready to build.</div></aside></div></section>
+<section class="game-section chess-game" id="chessGame">
+  <div class="chess-head">
+    <div>
+      <div class="eyebrow">GAME 03</div>
+      <h2>Chess</h2>
+      <p class="muted">Play a five-stage computer opponent. Choose your side, then make your move.</p>
+    </div>
+  </div>
+
+  <div class="chess-controls">
+    <button class="go chess-color active" data-color="white" type="button">Play White</button>
+    <button class="go chess-color" data-color="black" type="button">Play Black</button>
+    <button class="go chess-difficulty active" data-level="1" type="button">1</button>
+    <button class="go chess-difficulty" data-level="2" type="button">2</button>
+    <button class="go chess-difficulty" data-level="3" type="button">3</button>
+    <button class="go chess-difficulty" data-level="4" type="button">4</button>
+    <button class="go chess-difficulty" data-level="5" type="button">5</button>
+    <button id="chessNew" class="go" type="button">New game</button>
+  </div>
+
+  <div class="chess-layout">
+    <div id="chessBoard" class="chess-board" aria-label="Chess board"></div>
+    <aside class="chess-side">
+      <h3>Game Info</h3>
+      <div><b>Side:</b> <span id="chessSide">White</span></div>
+      <div><b>Difficulty:</b> <span id="chessLevel">1 — Beginner</span></div>
+      <div id="chessStatus" class="chess-status">Your move.</div>
+      <div class="chess-note">
+        Difficulty 1 plays simply and quickly. Difficulty 5 searches deeper and plays more strategically.
+        Click a piece, then click a highlighted square to move it.
+      </div>
+    </aside>
+  </div>
+</section>
+<script>
+(()=>{const C=document.getElementById("towerCanvas"),X=C.getContext("2d"),M=document.getElementById("tdMoney"),L=document.getElementById("tdLives"),W=document.getElementById("tdWave"),LOG=document.getElementById("tdLog");
+const T={"!":{n:"Cannon",c:55,d:34,r:125,s:850,a:"Heavy damage"},"^":{n:"Standard",c:35,d:13,r:110,s:420,a:"Balanced"},"$":{n:"Money Farm",c:75,d:0,r:0,s:4000,a:"+$18 every 4s",i:18},"@":{n:"Ice Launcher",c:65,d:8,r:120,s:700,a:"Slows 52%",sl:.48,st:1700},"#":{n:"Burst",c:85,d:9,r:105,s:1050,a:"3 shots",shots:3},"%":{n:"Sniper",c:100,d:75,r:245,s:1800,a:"Long range"},"&":{n:"Shock",c:90,d:18,r:115,s:950,a:"Chains to 2"},"*":{n:"Rapid",c:80,d:7,r:95,s:180,a:"Very fast"}};
+const E=[{e:":)",h:45,v:42,r:7},{e:":(",h:150,v:25,r:14},{e:">:(",h:60,v:82,r:10},{e:">:)",h:75,v:45,r:13,sp:5},{e:":D",h:95,v:35,r:16,he:8},{e:":O",h:210,v:22,r:20,ar:.22},{e:":P",h:80,v:62,r:18,dg:.18},{e:"D:",h:480,v:18,r:45,ar:.12}];
+let money=180,lives=20,wave=0,running=false,paused=false,sel="^",path=[],turrets=[],enemies=[],shots=[],spawned=0,total=0,spawn=0,seed=Math.random()*10000,last=performance.now();
+function rnd(){return (Math.sin(seed++)*10000)%1+.5}
+function map(){path=[];let y=55+rnd()*390;path.push({x:-20,y});for(let i=0;i<6;i++){let x=100+i*135+rnd()*35;path.push({x,y});y=45+rnd()*410;path.push({x,y})}path.push({x:920,y})}
+function plen(){let n=0;for(let i=1;i<path.length;i++)n+=Math.hypot(path[i].x-path[i-1].x,path[i].y-path[i-1].y);return n}
+function pp(d){for(let i=1;i<path.length;i++){let a=path[i-1],b=path[i],q=Math.hypot(b.x-a.x,b.y-a.y);if(d<=q){let z=d/q;return{x:a.x+(b.x-a.x)*z,y:a.y+(b.y-a.y)*z}}d-=q}return path.at(-1)}
+function seg(p,a,b){let dx=b.x-a.x,dy=b.y-a.y,q=dx*dx+dy*dy;if(!q)return Math.hypot(p.x-a.x,p.y-a.y);let z=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/q));return Math.hypot(p.x-a.x-z*dx,p.y-a.y-z*dy)}
+function onpath(x,y){for(let i=1;i<path.length;i++)if(seg({x,y},path[i-1],path[i])<25)return true;return false}
+function draw(){X.clearRect(0,0,900,500);X.fillStyle="#dfe8d7";X.fillRect(0,0,900,500);X.lineCap="round";X.lineJoin="round";X.strokeStyle="#b8a77b";X.lineWidth=48;X.beginPath();X.moveTo(path[0].x,path[0].y);path.slice(1).forEach(p=>X.lineTo(p.x,p.y));X.stroke();X.strokeStyle="#d4c69c";X.lineWidth=38;X.beginPath();X.moveTo(path[0].x,path[0].y);path.slice(1).forEach(p=>X.lineTo(p.x,p.y));X.stroke();
+turrets.forEach(t=>{let s=T[t.k];X.beginPath();X.arc(t.x,t.y,18,0,7);X.fillStyle="#555";X.fill();X.fillStyle="#fff";X.font="bold 16px sans-serif";X.textAlign="center";X.textBaseline="middle";X.fillText(t.k,t.x,t.y)});enemies.forEach(e=>{X.font="bold 22px sans-serif";X.textAlign="center";X.fillStyle="#333";X.fillText(e.s.e,e.x,e.y);let q=Math.max(0,e.h/e.m);X.fillStyle="#633";X.fillRect(e.x-18,e.y-19,36,5);X.fillStyle="#5a9b52";X.fillRect(e.x-18,e.y-19,36*q,5)});shots.forEach(s=>{X.fillStyle="#333";X.beginPath();X.arc(s.x,s.y,4,0,7);X.fill()})}
+function stats(){M.textContent=Math.floor(money);L.textContent=lives;W.textContent=wave}
+function list(){let z=document.getElementById("tdTurrets");z.innerHTML="";Object.entries(T).forEach(([k,s])=>{let b=document.createElement("button");b.className="turret-choice"+(k===sel?" selected":"");b.innerHTML=`<b>${k} ${s.n}</b><span class="turret-cost">$${s.c}</span><small>${s.d?s.d+" dmg · ":""}${s.r?s.r+" range · ":""}${s.a}</small>`;b.onclick=()=>{sel=k;list();LOG.textContent=`${k} ${s.n} selected — $${s.c}`};z.appendChild(b)})}
+function spawnEnemy(){let pool=[0,0,0,0,1,2];if(wave>=2)pool.push(3);if(wave>=3)pool.push(4,5);if(wave>=4)pool.push(6);if(wave>=6)pool.push(7);let s=E[pool[Math.floor(Math.random()*pool.length)]],p=pp(0),sc=1+(wave-1)*.12;enemies.push({x:p.x,y:p.y,d:0,h:s.h*sc,m:s.h*sc,v:s.v,s,reward:s.r,slow:1,until:0})}
+function place(x,y){let s=T[sel];if(running){LOG.textContent="Place turrets before starting the round.";return}if(money<s.c){LOG.textContent="Not enough money.";return}if(onpath(x,y)||turrets.some(t=>Math.hypot(t.x-x,t.y-y)<34)){LOG.textContent="Choose an open grass area.";return}money-=s.c;turrets.push({x,y,k:sel,cd:0});stats()}
+function dmg(e,s){e.h-=s.d*(1-(e.s.ar||0));if(s.sl){e.slow=s.sl;e.until=performance.now()+s.st}}
+function update(dt,now){if(!running||paused)return;turrets.forEach(t=>{let s=T[t.k];t.cd-=dt;if(s.i&&t.cd<=0){money+=s.i;t.cd=s.s}if(s.d&&t.cd<=0){let a=enemies.filter(e=>e.h>0&&Math.hypot(e.x-t.x,e.y-t.y)<=s.r).sort((a,b)=>b.d-a.d)[0];if(a){let n=s.shots||1;while(n--&&a)dmg(a,s);t.cd=s.s}}});
+if(spawned<total){spawn-=dt;if(spawn<=0){spawnEnemy();spawned++;spawn=480-Math.min(220,wave*12)}}else if(!enemies.length){running=false;money+=30+wave*5;LOG.textContent=`Wave ${wave} cleared! Bonus earned.`}
+let end=plen();enemies.forEach(e=>{if(e.until<now)e.slow=1;e.d+=e.v*e.slow*dt/1000;let p=pp(e.d);e.x=p.x;e.y=p.y});
+enemies=enemies.filter(e=>{if(e.d>=end){lives--;return false}return e.h>0});let dead=[];enemies.forEach(e=>{if(e.h<=0){money+=e.reward;if(e.s.sp)for(let i=0;i<e.s.sp;i++){let p=pp(Math.max(0,e.d-3));enemies.push({x:p.x+Math.random()*8,y:p.y+Math.random()*8,d:e.d,h:45,m:45,v:45,s:E[0],reward:7,slow:1,until:0})}}});enemies=enemies.filter(e=>e.h>0);if(lives<=0){lives=0;running=false;LOG.textContent="Game over — reset to try again."}stats()}
+function loop(now){let dt=Math.min(50,now-last);last=now;update(dt,now);draw();requestAnimationFrame(loop)}
+C.onclick=e=>{let r=C.getBoundingClientRect();place((e.clientX-r.left)*900/r.width,(e.clientY-r.top)*500/r.height)};
+document.getElementById("tdStart").onclick=()=>{if(!running&&lives>0){wave++;spawned=0;total=6+wave*2;spawn=0;running=true;paused=false;LOG.textContent=`Wave ${wave} started!`;stats()}};
+document.getElementById("tdPause").onclick=()=>{if(running){paused=!paused;document.getElementById("tdPause").textContent=paused?"Resume":"Pause"}};
+document.getElementById("tdMap").onclick=()=>{running=false;path=[];seed=Math.random()*10000;map();money=180;lives=20;wave=0;turrets=[];enemies=[];stats();LOG.textContent="New dynamic map generated."};
+document.getElementById("tdReset").onclick=()=>{running=false;money=180;lives=20;wave=0;turrets=[];enemies=[];stats();LOG.textContent="Defense reset."};
+map();list();stats();requestAnimationFrame(loop)})();
+
+/* ================================================================
+   CHESS — complete playable game
+   ================================================================ */
+const chessBoardEl = document.getElementById("chessBoard");
+const chessStatusEl = document.getElementById("chessStatus");
+const chessSideEl = document.getElementById("chessSide");
+const chessLevelEl = document.getElementById("chessLevel");
+const chessNewBtn = document.getElementById("chessNew");
+
+const CHESS_SYMBOLS={w:{K:"♔",Q:"♕",R:"♖",B:"♗",N:"♘",P:"♙"},b:{K:"♚",Q:"♛",R:"♜",B:"♝",N:"♞",P:"♟"}};
+const CHESS_VALUES={P:100,N:320,B:330,R:500,Q:900,K:20000};
+const CHESS_NAMES=["Beginner","Casual","Intermediate","Advanced","Expert"];
+
+let chessState, chessPlayer="w", chessLevel=1, chessSelected=null, chessThinking=false, chessGameOver=false;
+
+function chessInitialState(){
+  return {
+    board:[
+      ["bR","bN","bB","bQ","bK","bB","bN","bR"],
+      ["bP","bP","bP","bP","bP","bP","bP","bP"],
+      [null,null,null,null,null,null,null,null],
+      [null,null,null,null,null,null,null,null],
+      [null,null,null,null,null,null,null,null],
+      [null,null,null,null,null,null,null,null],
+      ["wP","wP","wP","wP","wP","wP","wP","wP"],
+      ["wR","wN","wB","wQ","wK","wB","wN","wR"]
+    ],
+    turn:"w",
+    castle:{wK:true,wQ:true,bK:true,bQ:true},
+    ep:null,
+    halfmove:0
+  };
+}
+function chessCloneState(s){
+  return {board:s.board.map(r=>[...r]),turn:s.turn,castle:{...s.castle},ep:s.ep?[...s.ep]:null,halfmove:s.halfmove};
+}
+function chessColor(p){return p?p[0]:null}
+function chessType(p){return p?p[1]:null}
+function chessInBounds(r,c){return r>=0&&r<8&&c>=0&&c<8}
+
+function chessFindKing(board,color){
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++)if(board[r][c]===color+"K")return [r,c];
+  return null;
+}
+function chessSquareAttacked(board,r,c,by){
+  const pawnDir=by==="w"?-1:1;
+  for(const dc of [-1,1]) if(chessInBounds(r-pawnDir,c+dc)&&board[r-pawnDir][c+dc]===by+"P") return true;
+  const knights=[[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]];
+  for(const [dr,dc] of knights) if(chessInBounds(r+dr,c+dc)&&board[r+dr][c+dc]===by+"N") return true;
+  const lines=[
+    [[1,0],[-1,0],[0,1],[0,-1],["R","Q"]],
+    [[1,1],[1,-1],[-1,1],[-1,-1],["B","Q"]]
+  ];
+  for(const group of lines){
+    const dirs=group.slice(0,4), types=group[4];
+    for(const [dr,dc] of dirs){
+      let rr=r+dr,cc=c+dc;
+      while(chessInBounds(rr,cc)){
+        const p=board[rr][cc];
+        if(p){if(chessColor(p)===by&&types.includes(chessType(p)))return true;break}
+        rr+=dr;cc+=dc;
+      }
+    }
+  }
+  for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
+    if(!dr&&!dc)continue;
+    const rr=r+dr,cc=c+dc;
+    if(chessInBounds(rr,cc)&&board[rr][cc]===by+"K")return true;
+  }
+  return false;
+}
+function chessInCheck(state,color){
+  const k=chessFindKing(state.board,color);
+  return !k || chessSquareAttacked(state.board,k[0],k[1],color==="w"?"b":"w");
+}
+
+function chessPseudoMoves(state,r,c){
+  const board=state.board,piece=board[r][c],out=[];
+  if(!piece)return out;
+  const color=chessColor(piece),type=chessType(piece),enemy=color==="w"?"b":"w";
+  const add=(rr,cc,extra={})=>{
+    if(!chessInBounds(rr,cc))return false;
+    const target=board[rr][cc];
+    if(target&&chessColor(target)===color)return false;
+    if(target&&chessType(target)==="K")return false;
+    out.push({from:[r,c],to:[rr,cc],...extra});
+    return !target;
+  };
+
+  if(type==="P"){
+    const dir=color==="w"?-1:1,start=color==="w"?6:1;
+    if(chessInBounds(r+dir,c)&&!board[r+dir][c]){
+      add(r+dir,c);
+      if(r===start&&!board[r+2*dir][c])add(r+2*dir,c,{doublePawn:true});
+    }
+    for(const dc of [-1,1]){
+      const rr=r+dir,cc=c+dc;
+      if(!chessInBounds(rr,cc))continue;
+      if(board[rr][cc]&&chessColor(board[rr][cc])===enemy&&chessType(board[rr][cc])!=="K") add(rr,cc);
+      if(state.ep&&state.ep[0]===rr&&state.ep[1]===cc) add(rr,cc,{enPassant:true});
+    }
+    return out;
+  }
+  if(type==="N"){
+    [[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]].forEach(([dr,dc])=>add(r+dr,c+dc));
+    return out;
+  }
+  const dirs=type==="B"?[[1,1],[1,-1],[-1,1],[-1,-1]]:
+             type==="R"?[[1,0],[-1,0],[0,1],[0,-1]]:
+             type==="Q"?[[1,1],[1,-1],[-1,1],[-1,-1],[1,0],[-1,0],[0,1],[0,-1]]:[];
+  if(dirs.length){
+    dirs.forEach(([dr,dc])=>{let rr=r+dr,cc=c+dc;while(chessInBounds(rr,cc)){const keep=add(rr,cc);if(!keep)break;rr+=dr;cc+=dc}});
+    return out;
+  }
+  if(type==="K"){
+    for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++)if(dr||dc)add(r+dr,c+dc);
+    const row=color==="w"?7:0;
+    if(r===row&&c===4&&!chessInCheck(state,color)){
+      const rights=color==="w"?["wK","wQ"]:["bK","bQ"];
+      if(state.castle[rights[0]]&&!board[row][5]&&!board[row][6]&&board[row][7]===color+"R"&&
+         !chessSquareAttacked(board,row,5,enemy)&&!chessSquareAttacked(board,row,6,enemy))
+        out.push({from:[r,c],to:[row,6],castle:"K"});
+      if(state.castle[rights[1]]&&!board[row][1]&&!board[row][2]&&!board[row][3]&&board[row][0]===color+"R"&&
+         !chessSquareAttacked(board,row,3,enemy)&&!chessSquareAttacked(board,row,2,enemy))
+        out.push({from:[r,c],to:[row,2],castle:"Q"});
+    }
+  }
+  return out;
+}
+function chessMakeMove(state,move){
+  const next=chessCloneState(state),b=next.board;
+  const [r,c]=move.from,[rr,cc]=move.to,piece=b[r][c],color=chessColor(piece),type=chessType(piece);
+  const captured=b[rr][cc];
+  b[rr][cc]=piece;b[r][c]=null;
+
+  if(move.enPassant)b[r][cc]=null;
+  if(move.castle){
+    const row=r,rookC=move.castle==="K"?7:0,newC=move.castle==="K"?5:3;
+    b[row][newC]=b[row][rookC];b[row][rookC]=null;
+  }
+  if(type==="P"&&(rr===0||rr===7))b[rr][cc]=color+"Q";
+
+  if(type==="K"){next.castle[color+"K"]=false;next.castle[color+"Q"]=false}
+  if(type==="R"){
+    if(color==="w"&&r===7&&c===0)next.castle.wQ=false;
+    if(color==="w"&&r===7&&c===7)next.castle.wK=false;
+    if(color==="b"&&r===0&&c===0)next.castle.bQ=false;
+    if(color==="b"&&r===0&&c===7)next.castle.bK=false;
+  }
+  if(captured==="wR"){if(rr===7&&cc===0)next.castle.wQ=false;if(rr===7&&cc===7)next.castle.wK=false}
+  if(captured==="bR"){if(rr===0&&cc===0)next.castle.bQ=false;if(rr===0&&cc===7)next.castle.bK=false}
+
+  next.ep=(type==="P"&&Math.abs(rr-r)===2)?[(r+rr)/2,c]:null;
+  next.halfmove=(type==="P"||captured||move.enPassant)?0:next.halfmove+1;
+  next.turn=color==="w"?"b":"w";
+  return next;
+}
+function chessLegalMoves(state,color=state.turn){
+  const moves=[];
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+    if(chessColor(state.board[r][c])!==color)continue;
+    for(const m of chessPseudoMoves(state,r,c)){
+      const next=chessMakeMove(state,m);
+      if(!chessInCheck(next,color))moves.push(m);
+    }
+  }
+  return moves;
+}
+function chessMoveKey(m){return m.from.join("")+m.to.join("")+(m.castle||"")+(m.enPassant?"e":"")}
+
+function chessEvaluate(state){
+  let score=0;
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+    const p=state.board[r][c];if(!p)continue;
+    const val=CHESS_VALUES[chessType(p)];
+    const center=(3.5-Math.abs(3.5-c))*8+(3.5-Math.abs(3.5-r))*4;
+    score+=(chessColor(p)==="b"?1:-1)*(val+center);
+  }
+  return score;
+}
+function chessSearch(state,depth,alpha,beta,maximizing){
+  const moves=chessLegalMoves(state,state.turn);
+  if(!moves.length){
+    if(chessInCheck(state,state.turn)) return state.turn==="b"?-999999-depth:999999+depth;
+    return 0;
+  }
+  if(depth===0)return chessEvaluate(state);
+  if(maximizing){
+    let best=-Infinity;
+    for(const m of moves){best=Math.max(best,chessSearch(chessMakeMove(state,m),depth-1,alpha,beta,false));alpha=Math.max(alpha,best);if(beta<=alpha)break}
+    return best;
+  }else{
+    let best=Infinity;
+    for(const m of moves){best=Math.min(best,chessSearch(chessMakeMove(state,m),depth-1,alpha,beta,true));beta=Math.min(beta,best);if(beta<=alpha)break}
+    return best;
+  }
+}
+function chessComputerMove(){
+  if(chessGameOver||chessState.turn===chessPlayer)return;
+  chessThinking=true;chessStatusEl.textContent="Computer is thinking…";
+  setTimeout(()=>{
+    if(chessGameOver)return;
+    const moves=chessLegalMoves(chessState);
+    if(!moves.length){chessThinking=false;chessCheckState();return}
+    let chosen;
+    if(chessLevel===1){
+      const shuffled=[...moves].sort(()=>Math.random()-.5);
+      chosen=shuffled[0];
+    }else{
+      const depth=chessLevel===2?1:chessLevel===3?2:chessLevel===4?3:3;
+      let best=-Infinity,candidates=[];
+      for(const m of moves){
+        const score=chessSearch(chessMakeMove(chessState,m),depth-1,-Infinity,Infinity,false);
+        if(score>best){best=score;candidates=[m]}else if(score===best)candidates.push(m);
+      }
+      chosen=candidates[Math.floor(Math.random()*candidates.length)];
+    }
+    chessState=chessMakeMove(chessState,chosen);chessSelected=null;chessThinking=false;chessRender();chessCheckState();
+  },220);
+}
+function chessFinishIfNeeded(){
+  const moves=chessLegalMoves(chessState);
+  if(moves.length)return false;
+  chessGameOver=true;
+  if(chessInCheck(chessState,chessState.turn)){
+    chessStatusEl.textContent=`Checkmate — ${chessState.turn==="w"?"Black":"White"} wins.`;
+  }else chessStatusEl.textContent="Stalemate — draw.";
+  return true;
+}
+function chessCheckState(){
+  if(chessFinishIfNeeded())return;
+  const check=chessInCheck(chessState,chessState.turn);
+  chessStatusEl.textContent=(chessState.turn===chessPlayer?"Your move":"Computer's move")+(check?" — Check!":"");
+  chessRender();
+  if(chessState.turn!==chessPlayer)chessComputerMove();
+}
+function chessRender(){
+  chessBoardEl.innerHTML="";
+  const flip=chessPlayer==="b";
+  const legal=chessSelected?chessLegalMoves(chessState,chessPlayer).filter(m=>m.from[0]===chessSelected[0]&&m.from[1]===chessSelected[1]):[];
+  for(let dr=0;dr<8;dr++)for(let dc=0;dc<8;dc++){
+    const r=flip?7-dr:dr,c=flip?7-dc:dc,btn=document.createElement("button");
+    btn.type="button";btn.className="chess-square "+((r+c)%2===0?"light":"dark");
+    if(chessSelected&&r===chessSelected[0]&&c===chessSelected[1])btn.classList.add("selected");
+    const m=legal.find(x=>x.to[0]===r&&x.to[1]===c);
+    if(m)btn.classList.add(chessState.board[r][c]||m.enPassant?"capture":"legal");
+    const piece=chessState.board[r][c];
+    if(piece){const span=document.createElement("span");span.className="chess-piece";span.textContent=CHESS_SYMBOLS[chessColor(piece)][chessType(piece)];btn.appendChild(span)}
+    btn.addEventListener("click",()=>chessClick(r,c));chessBoardEl.appendChild(btn);
+  }
+}
+function chessClick(r,c){
+  if(chessGameOver||chessThinking||chessState.turn!==chessPlayer)return;
+  const piece=chessState.board[r][c];
+  if(chessSelected){
+    const legal=chessLegalMoves(chessState,chessPlayer).find(m=>m.from[0]===chessSelected[0]&&m.from[1]===chessSelected[1]&&m.to[0]===r&&m.to[1]===c);
+    if(legal){chessState=chessMakeMove(chessState,legal);chessSelected=null;chessCheckState();return}
+  }
+  if(piece&&chessColor(piece)===chessPlayer){chessSelected=[r,c];chessRender()}
+  else{chessSelected=null;chessRender()}
+}
+function chessNewGame(){
+  chessState=chessInitialState();chessSelected=null;chessThinking=false;chessGameOver=false;
+  chessSideEl.textContent=chessPlayer==="w"?"White":"Black";
+  chessLevelEl.textContent=`${chessLevel} — ${CHESS_NAMES[chessLevel-1]}`;
+  chessRender();chessCheckState();
+}
+document.querySelectorAll(".chess-color").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll(".chess-color").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
+  chessPlayer=btn.dataset.color==="white"?"w":"b";chessNewGame();
+}));
+document.querySelectorAll(".chess-difficulty").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll(".chess-difficulty").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
+  chessLevel=Number(btn.dataset.level);chessNewGame();
+}));
+chessNewBtn.addEventListener("click",chessNewGame);
+chessNewGame();
+</script></body>
+</html>
